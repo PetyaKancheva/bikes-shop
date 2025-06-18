@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head}">
+</head>
+<body>
+<div class="page-wrap">
+    <div>
+        <nav th:replace="~{fragments/navigation}"></nav>
+    </div>
+    <div class="container justify-content-center ">
+
+
+        <h4 class="text-center text-dark pt-5">Login</h4>
+
+        <div th:if= "${message}"class="container text-center text-color w-25 p-3 border border-success-subtle border-5 rounded-1"
+            th:text="${message}"></div>
+
+
+        <form
+                th:action="@{/login}"
+                th:method="POST"
+
+                class="main-form mx-auto col-md-4 d-flex flex-column justify-content-center" id="login-form">
+
+            <div class="form-group py-2 ">
+                <input id="email"
+                       th:name="email"
+
+                       type="text"
+                       class="form-control"
+                       placeholder="Enter your e-Mail *"/>
+            </div>
+
+            <div class="form-group py-2">
+
+                <input id="password"
+                       th:name="password"
+                       type="password"
+                       class="form-control"
+                       placeholder="Your password *"/>
+            </div>
+
+            <p class="card-text"><small class="text-muted text-">* this is a mandatory field</small></p>
+
+            <div class="form-group py-2 justify-content-end">
+                <label for="rememberme"> Remember me</label>
+                <input id="rememberme" type="checkbox" th:name="rememberme">
+            </div>
+            <div class="button-holder mx-auto d-flex">
+                <input type="submit" class="btn btn-danger btn-lg  btn-block" value="Login"/>
+            </div>
+
+
+        </form>
+
+    </div>
+
+    <div>
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+</body>
+
+</html>

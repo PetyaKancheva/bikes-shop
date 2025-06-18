@@ -1,0 +1,46 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+      open-in-view: false
+      properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
+
+
+
+logging:
+  org:
+    hibernate:
+      type:
+        descriptor: TRACE
+      SQL: DEBUG
+    nodeValue: WARN
+    blog: WARN
+
+
+
+
+frankfurter:
+  schema: https
+  host: dummy
+  path: /v1/latest
+  symbols: BGN,USD,PLN
+  enabled: true
+
+
+bikes:
+  rememberMeKey: key
+
+
+mail:
+  email: "test@mail.com"
+  host: localhost
+  port: 1111
+  username: email@mail.com
+  password: password

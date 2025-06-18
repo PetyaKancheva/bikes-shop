@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head}">
+</head>
+<body>
+<div>
+    <nav th:replace="~{fragments/navigation}"></nav>
+</div>
+<div>
+    <div class=" container justify-content-center ">
+
+        <div th:if="${message}"
+             class="container text-center text-color w-25 p-3 border border-success-subtle border-5 rounded-1"
+             th:text="${message}"></div>
+
+
+        <div class="container mx-auto " >
+            <div class=" d-flex">
+                <button class="btn btn-dark " type="button"
+                        onclick="javascript:history.back()">Back
+                </button>
+            </div>
+            <div class="col-4 mx-auto  text-center"
+                 th:object="${singleProduct}">
+                <h5 class="text-center"
+                    th:text="*{name}">
+                </h5>
+                <div class="  py-2">
+                    <img th:src="*{pictureURL}" alt="image" class="img-thumbnail rounded " style="width: 300px;">
+                </div>
+                <div class=" text-start py-2" th:text="*{description}"></th:block>
+                </div>
+                <div class="py-2"><span>Price: </span>
+                    <th:block th:text="${#numbers.formatCurrency(singleProduct.price*currDTO.rate)}"></th:block>
+                </div>
+                <!--   Form Start -->
+                <form th:action="@{/product/{pid}(pid=${singleProduct.compositeName()})}"
+                      th:method="POST"
+                      th:object="${itemDTO}"
+                      id="buy-form">
+                    <input type="hidden" th:name="productCompositeName" th:value="${singleProduct.compositeName()}">
+                    <input type="hidden" th:name="productName" th:value="${singleProduct.name}">
+                    <input type="hidden" th:name="price" th:value="${singleProduct.price}">
+
+                    <label> Select quantity: </label>
+                    <select th:field="*{quantity}">
+                        <option class="dropdown-item" th:each="i : ${#numbers.sequence(1,10)}" th:value="${i}"
+                                th:text="${i}">
+                        </option>
+                    </select>
+                    <p th:each="err : ${#fields.errors('itemDTO.*')}" th:text="${err}"></p>
+                    <input class="btn btn-danger" type="submit" value="Buy">
+
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div>
+    <footer th:replace="~{fragments/footer}"></footer>
+</div>
+
+</body>
+</html>

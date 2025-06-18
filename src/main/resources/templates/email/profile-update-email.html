@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello</title>
+</head>
+<body>
+<h3>Hello, <th:block th:text="${user_first_name}">Petya</th:block>!</h3>
+
+We have identified an update to your Bikes-Shop account at: <th:block th:text="${timeOfUpdate}"></th:block>.
+
+If that was you, no further action is required.
+
+If that was not you, please immediately contact us at service@bikes-shop.com
+
+Your Bikes-Shop!
+
+</body>
+</html>

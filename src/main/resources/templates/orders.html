@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head}">
+</head>
+<body>
+<div>
+    <nav th:replace="~{fragments/navigation}"></nav>
+</div>
+<div>
+    <div class=" container  justify-content-center">
+
+        <div class="text-center">
+            <h3>Purchased orders:</h3>
+            <div class=" cols-4 mx-auto mb-5 " th:each="order,iO:${allOrders}">
+                Order number:
+                <th:block th:text="${iO.index+1}"></th:block>
+                <table class="  border border-dark mx-auto">
+                    <tr class="border border-dark fw-bold">
+                        <th>Item ID</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+
+                    <tr class="border border-dark" th:each="item,i:${order.items}">
+                        <td th:text="${i.index+1}"></td>
+                        <td th:text="${item.getProductName}"></td>
+                        <td th:text="${#numbers.formatCurrency(item.getPrice*currDTO.rate)}"></td>
+                        <td th:text="${item.getQuantity}"></td>
+                        </td>
+                    </tr>
+
+                </table>
+                    <span class="fst-italic">Total: </span> <th:block class="fst-italic" th:text="${#numbers.formatCurrency(order.totalSum()*currDTO.rate)}"></th:block>
+
+
+            </div>
+        </div>
+        <div class="  py-2  text-center">
+            <button class=" btn btn-dark " type="button" onclick="window.location = '/'">Go Home</button>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div>
+    <footer th:replace="~{fragments/footer}"></footer>
+</div>
+
+</body>
+</html>

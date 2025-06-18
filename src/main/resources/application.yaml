@@ -1,0 +1,88 @@
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/shop?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    password: ${MYSQL_PASSWORD:}
+    username: ${MYSQL_USERNAME:}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+      open-in-view: false
+      properties:
+        validation: none
+        format_sql: true
+    show-sql: true
+
+  sql:
+    init:
+      mode: never
+
+ #  ****    for postgres server ****
+#spring:
+#  datasource:
+#    driverClassName:  org.postgresql.Driver
+#    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/shop
+#    password: ${POSTGRES_PASSWORD}
+#    username: ${POSTGRES_USERNAME}
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true
+#  sql:
+#    init:
+#      mode: always
+
+
+  thymeleaf:
+    cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: file:src/main/resources/templates/
+    resources:
+      static-locations: file:src/main/resources/static/
+      cache:
+        period: 0
+
+logging:
+  org:
+    hibernate:
+      type:
+        descriptor: TRACE
+      SQL: DEBUG
+    nodeValue: WARN
+    blog: WARN
+
+server:
+  port: 8080
+
+frankfurter:
+  schema: https
+  host: api.frankfurter.dev
+  path: /v1/latest
+  symbols: BGN,USD,PLN
+  enabled: true
+
+
+bikes:
+  rememberMeKey: ${REMEMBER_ME_KEY:key}
+
+
+mail:
+  email: "bikes-shop@mail.com"
+  host: localhost
+  port: 1025
+  username: ${MAIL_USER:admin}
+  password: ${MAIL_PASSWORD:password}
+
+comments-server:
+  schema: http
+  host: localhost
+  port: 6363
+  path: /
+  enabled: true

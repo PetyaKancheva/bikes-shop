@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head}">
+</head>
+<body>
+<div>
+    <nav th:replace="~{fragments/navigation}"></nav>
+</div>
+
+<div class="container justify-content-center ">
+    <div th:if= "${message}"class="container text-center text-color w-25 p-3 border border-success-subtle border-5 rounded-1"
+         th:text="${message}"></div>
+
+    <div class=" w-25 mx-auto text-center ">
+        <h4 class="text-dark pb-3">I'm already a Customer</h4>
+        <a class="btn btn-block  btn-dark" th:href="@{/login}">Log in</a>
+    </div>
+
+    <h4 class="text-center text-dark py-2 ">I am a new Customer</h4>
+
+    <form
+            th:action="@{/register}"
+            th:method="POST"
+            th:object="${userRegisterDTO}"
+            class=" mx-auto col-sm-4 d-flex flex-column justify-content-center" id="register-form">
+
+        <div class="form-floating mb-3">
+            <input id="firstName"
+                   th:name="firstName"
+                   th:errorclass="is-invalid "
+                   type="text"
+                   th:field="*{firstName}"
+                   class="form-control"
+                   placeholder="First name*"/>
+            <label for="firstName">First name *</label>
+            <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+               class="invalid-feedback errors alert alert-danger"></p>
+        </div>
+
+        <div class="form-floating mb-3 ">
+            <input id="lastName"
+                   th:name="lastName"
+                   th:errorclass="is-invalid "
+                   type="text"
+                   class="form-control"
+                   th:field="*{lastName}"
+                    placeholder="Last name*"/>
+            <label for="lastName">Last name*</label>
+            <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+               class="invalid-feedback errors alert alert-danger"></p>
+        </div>
+
+
+        <div class="form-floating mb-3 ">
+            <input id="email"
+                   th:name="email"
+                   th:errorclass="is-invalid"
+                   type="text"
+                   class="form-control"
+                   th:field="*{email}"
+                   placeholder="Enter your e-mail address *"/>
+            <label for="email">Enter your e-mail address *</label>
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+               class="invalid-feedback errors alert alert-danger"></p>
+        </div>
+        <div class="form-floating mb-3 ">
+            <input id="address"
+                   th:name="address"
+                   th:errorclass="is-invalid"
+                   type="text"
+                   class="form-control"
+                   th:field="*{address}"
+                   placeholder="Enter your address *"/>
+            <label for="address">Enter your address *</label>
+            <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
+               class="invalid-feedback errors alert alert-danger"></p>
+        </div>
+        <div class="form-floating mb-3  ">
+            <input id="country"
+                   th:name="country"
+                   th:errorclass="is-invalid"
+                   type="text"
+                   class="form-control"
+                   th:field="*{country}"
+                   placeholder="Enter your country "/>
+            <label for="country">Enter your country </label>
+            <p th:if="${#fields.hasErrors('country')}" th:errors="*{country}"
+               class="invalid-feedback errors alert alert-danger"></p>
+        </div>
+
+        <div class="form-floating mb-3 ">
+
+            <input id="password"
+                   th:name="password"
+                   th:errorclass="is-invalid"
+                   type="password"
+                   class="form-control"
+                   placeholder="Your password *"/>
+            <label for="password">Your password *</label>
+            <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+               class="invalid-feedback errors alert alert-danger"></p>
+
+        </div>
+
+        <div class="form-floating mb-3 ">
+
+            <input id="confirmPassword"
+                   th:name="confirmPassword"
+                   th:errorclass="is-invalid"
+                   type="password"
+                   class="form-control"
+                   placeholder="Re-enter your password *"/>
+            <label for="confirmPassword">Re-enter your password *</label>
+            <p th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+               class="invalid-feedback errors alert alert-danger"></p>
+        </div>
+
+
+
+        <p class="card-text"><small class="text-muted text-">* this is a mandatory field</small></p>
+
+        <div class="button-holder mx-auto py-2 d-flex">
+
+            <input type="submit" class="btn btn-danger btn-lg  btn-block" value="Register"/>
+
+        </div>
+
+
+    </form>
+</div>
+
+<div>
+    <footer th:replace="~{fragments/footer}"></footer>
+</div>
+</body>
+
+</html>

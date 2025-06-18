@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec='http://www.thymeleaf.org/extras/spring-security'>
+<head
+
+        th:replace="~{fragments/head}">
+</head>
+<body>
+<div>
+    <nav th:replace="~{fragments/navigation}"></nav>
+</div>
+<div>
+    <div class="main-container container justify-content-center ">
+        <div class="row  ">
+            <div th:replace="~{fragments/sidebar}"></div>
+
+            <div class="col-10 text-center p-3 ">
+
+                <div th:if="${message}"
+                     class="container text-center text-color w-25 p-3 border border-success-subtle border-5 rounded-1"
+                     th:text="${message}"></div>
+
+                <div class="figure-img pt-2" style="width:900px;height:370px"><img
+                        th:src="@{/images/front_page.jpg}" alt="front page image"
+                        class="h-100"></div>
+
+                <div class="col ">
+
+                    <div class=" d-flex text-end  border-bottom p-3 ">
+
+                        <div class="dropdown d-flex" id="selectDropdown">
+                            <a class="btn                          dropdown-toggle" role="button" id="dropdownMenuLink"
+                               data-bs-toggle="dropdown" aria-expanded="false"
+                               href=#>Sort by</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li><a class="dropdown-item "
+                                       th:href="@{/(s=${products.size},p=${products.getNumber()},o='name: asc')}">Name</a>
+                                </li>
+                                <li><a class="dropdown-item "
+                                       th:href="@{/(s=${products.size},p=${products.getNumber()},o='price: asc')}">Price
+                                    0-9</a></li>
+                                <li><a class="dropdown-item"
+                                       th:href="@{/(s=${products.size},p=${products.getNumber()},o='price: desc')}">Price
+                                    9-0</a></li>
+                            </ul>
+                        </div>
+                        <!--                                grid for by 3-->
+                        <a class="text-decoration-none"
+                           th:href="@{/(s=3,p=${products.getNumber()},o=${products.getSort()})}">
+                            <i class="fa-solid fa-table-cells-large"></i></a>
+                        &nbsp;<!--                                grid for by 6-->
+                        <a class="text-decoration-none"
+                           th:href="@{/(s=6,p=${products.getNumber()},o=${products.getSort()})}">
+                            <i class="fa-solid fa-table-cells"></i></a>
+                    </div>
+                </div>
+                <div class="row row-cols-sm-3  ">
+                    <div class="col" th:each="product:${products}">
+                        <a class="product-link" th:href="@{/product/{pid}(pid=${product.compositeName()})}">
+                            <div class="container">
+
+                                <div class="img-thumbnail rounded " style="width: 300px; height: 200px;"><img
+                                        th:src="@{${product.pictureURL}}" alt="image"
+                                        class="h-100"></div>
+                                <div th:text="${product.name}"></div>
+                                <div><span> Price: </span>
+                                    <th:block th:text="${#numbers.formatCurrency(product.price*currDTO.rate)}">></th:block>
+
+                                </div>
+                                </div>
+                            </a>
+                    </div>
+
+                </div>
+                <nav class="pt-5" aria-label="Page navigation">
+
+                    <ul class="pagination ">
+
+                        <!-- previous page -->
+                        <li class="page-item" th:classappend="${products.isFirst() ? 'disabled' : ''}">
+                            <a th:if="${products.isFirst()}" class="page-link" href="#" aria-label="First"><span
+                                    aria-hidden="true">Previous</span></a>
+                            <a th:unless="${products.isFirst()}" class="page-link"
+                               th:href="@{/(s=${products.size},p=${products.getNumber()-1},o=${products.getSort()})}"
+                               aria-label="Previous"><span aria-hidden="true">Previous</span></a>
+                        </li>
+
+
+                        <!--loop pages -->
+                        <li class="page-item" th:classappend="${products.getNumber()==page ? 'active' : '' }"
+                            th:each="page:${#numbers.sequence(0,products.getTotalPages()-1)}"><a
+                                class="page-link" th:href="@{/(s=${products.size},p=${page},o=${products.getSort()})}"
+                                th:text="${page}+1"></a>
+                        </li>
+                        <!-- next page -->
+                        <li class="page-item" th:classappend="${products.isLast() ? 'disabled' : ''}">
+                            <a th:if="${products.isLast()}" class="page-link" href="#" aria-label="Next"><span
+                                    aria-hidden="true">Next</span></a>
+                            <a th:unless="${products.isLast()}" class="page-link"
+                               th:href="@{/(s=${products.size},p=${products.getNumber()+1},o=${products.getSort()})}"
+                               aria-label="Next"><span aria-hidden="true">Next</span></a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div>
+    <footer th:replace="~{fragments/footer}"></footer>
+</div>
+
+</body>
+</html>

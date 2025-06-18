@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header th:fragment="navigation" class=" header-main  ">
+
+    <nav class="navbar navbar-expand-lg bg-dark ">
+        <div class="container-fluid align-items-center">
+            <a class="navbar-brand" th:href="@{/}"><img alt="logo" src="/images/logo.png" class="logo" height="50"></a>
+
+            <!--            <div class="row-ms-auto">-->
+            <form th:action="@{/search-result}"
+                  th:method="POST"
+                  class="d-flex form-inline " role="search">
+                <input class="form-control col-sm  text-light bg-transparent border-danger" type="search"
+                       placeholder="Search" aria-label="Search"
+                       th:name="productToSearch">
+                <button class="btn btn-outline-danger" type="submit">Search</button>
+            </form>
+            <!--            </div>-->
+
+            <!--            <div class="row-ms-auto">-->
+            <div class="row-ms-auto">
+                <div class="col-12 justify-content-end " id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 text-light">
+                        <li class="nav-item">
+                            <a class="nav-link link-underline-opacity-100-hover text-light" th:href="@{/}">Home</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="nav-link text-light" th:href="@{/register}">Register</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="!isAuthenticated()">
+                            <a class="nav-link text-light" th:href="@{/login}">Login</a>
+                        </li>
+
+                        <li class="nav-item" sec:authorize="isAuthenticated()">
+                            <a class="nav-link text-light " th:href="@{/user}">User profile</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                            <a class="nav-link text-light" th:href="@{/admin}">Admin profile</a>
+                        </li>
+                        <li class="nav-item" sec:authorize="hasRole('EMPLOYEE')">
+                            <a class="nav-link  text-light " th:href="@{/product/add}">Add product</a>
+                        </li>
+                        <form th:method="POST" sec:authorize="isAuthenticated()" th:action="@{/logout}">
+                            <input type="submit" class="nav-link  text-light" value="Logout">
+                        </form>
+
+                    </ul>
+                    <!--            next row-->
+                    <ul class="navbar-nav  text-light">
+                        <li class="nav-item pl-2">
+                            <a class="nav-link  text-light">Hello:
+
+                                <th:block sec:authorize="isAuthenticated()"
+                                          sec:authentication="principal.firstName"></th:block>
+                                <th:block sec:authorize="!isAuthenticated()">Guest</th:block>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn text-light" sec:authorize="isAuthenticated()"
+                               th:href="@{/shopping-cart}"><i class="fa-solid fa-cart-shopping"></i>
+                                <th:block th:unless="${@currentOrder.items==null}"
+                                          th:text="${@currentOrder.items.size()}">
+                                </th:block>
+                            </a>
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" sec:authorize="isAuthenticated()"
+                               th:href="@{/orders}">Orders
+                            </a>
+                        </li>
+                        <!--            Currency part start -->
+
+                        <span class="nav-link  text-light" th:if="${listCurrencies}">Currency:</span>
+                        <form th:action="@{/currency}"
+                              th:method="POST"
+                              id="form-currency" th:if="${listCurrencies}">
+
+                            <select th:name="selectedCurrency" class="nav-link  text-light">
+                                <option th:each="curr:${listCurrencies}"
+                                        th:value="${curr}"
+                                        th:text="${curr}"
+                                        th:selected="${curr}==${currDTO.name}"
+                                        class="bg-dark  text-light">
+                                </option>
+                            </select>
+                        </form>
+
+
+                        <!--            Currency part End -->
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+        <!--        </div>-->
+    </nav>
+
+
+</header>
+
+<script>
+    $("#form-currency").on("change", function () {
+        $("#form-currency").submit();
+    });
+</script>
+</body>
+</html>
