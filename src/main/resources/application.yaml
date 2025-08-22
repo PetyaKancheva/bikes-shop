@@ -4,6 +4,13 @@ spring:
     url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/shop?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
     password: ${MYSQL_PASSWORD:}
     username: ${MYSQL_USERNAME:}
+# for RDS
+#spring:
+#  datasource:
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://${RDS_HOST}:${RDS_PORT}/shop?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+#    password: ${RDS_PASSWORD:}
+#    username: ${RDS_USERNAME:}
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     defer-datasource-initialization: true
