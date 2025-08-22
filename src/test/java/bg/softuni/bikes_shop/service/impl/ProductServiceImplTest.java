@@ -11,10 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -41,7 +38,7 @@ class ProductServiceImplTest {
     void getSingleProductCorrectly() {
         //arrange
 
-        ProductEntity testEntity = createEntity( );
+        ProductEntity testEntity = createEntity();
 
         when(mockProductRepository.findByCompositeName(testEntity.getCompositeName()))
                 .thenReturn(Optional.of(testEntity));
@@ -55,21 +52,85 @@ class ProductServiceImplTest {
         Assertions.assertEquals(testEntity.getPrice(), BigDecimal.valueOf(foundEntity.price()));
 
     }
+
+//        category, name, description
+    // make in one go
+
     @Test
-    void testSearchForProducts(){
-        ProductEntity testEntity= createEntity();
+    void testSearchForProductsWithName() {
+        ProductEntity testEntity = createEntity();
 
 //        category, name, description
 
-  // crate page of Entity
-        Page<ProductEntity> testPages= new PageImpl<ProductEntity>(List.of(testEntity),Pageable.unpaged(),1);
+        // crate page of Entity
+        Page<ProductEntity> testPages = new PageImpl<ProductEntity>(List.of(testEntity), Pageable.unpaged(), 1);
 
-       when( mockProductRepository.findAllByKeyword(testEntity.getName(), Pageable.unpaged()))
-               .thenReturn(testPages);
+        when(mockProductRepository.findAllByKeyword(testEntity.getName(), Pageable.unpaged()))
+                .thenReturn(testPages);
 
-       Page<ProductDTO> foundResult=serviceToTest.searchForProducts(testEntity.getName());
-       Assertions.assertEquals(foundResult.getTotalElements(),1);
+        Page<ProductDTO> foundResultName = serviceToTest.searchForProducts(testEntity.getName());
 
+        Assertions.assertEquals(1, foundResultName.getTotalElements());
+        Assertions.assertEquals(testEntity.getName(), foundResultName.getContent().getFirst().name());
+
+
+    }
+
+    @Test
+    void testSearchForProductsWithCategory() {
+        ProductEntity testEntity = createEntity();
+
+//        category, name, description
+
+        // crate page of Entity
+        Page<ProductEntity> testPages = new PageImpl<>(List.of(testEntity), Pageable.unpaged(), 1);
+
+        when(mockProductRepository.findAllByKeyword(testEntity.getCategory(), Pageable.unpaged()))
+                .thenReturn(testPages);
+
+        Page<ProductDTO> foundResultName = serviceToTest.searchForProducts(testEntity.getCategory());
+
+        Assertions.assertEquals(1, foundResultName.getTotalElements());
+        Assertions.assertEquals(testEntity.getCategory(), foundResultName.getContent().getFirst().category());
+
+    }
+
+    @Test
+    void testSearchForProductsWithDescription() {
+        ProductEntity testEntity = createEntity();
+
+        // crate page of Entity
+        Page<ProductEntity> testPages = new PageImpl<>(List.of(testEntity), Pageable.unpaged(), 1);
+
+        when(mockProductRepository.findAllByKeyword(testEntity.getDescription(), Pageable.unpaged()))
+                .thenReturn(testPages);
+
+        Page<ProductDTO> foundResultName = serviceToTest.searchForProducts(testEntity.getDescription());
+
+        Assertions.assertEquals(1, foundResultName.getTotalElements());
+        Assertions.assertEquals(testEntity.getDescription(), foundResultName.getContent().getFirst().description());
+
+    }
+
+    @Test
+    void testGetProducts() {
+        Integer size = 3;
+        Integer page = 0;
+        String sort = "name:ASC";
+        ProductEntity testEntity = createEntity();
+
+        Sort.Order order = new Sort.Order(Sort.Direction.fromString("asc"), "name");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+        // crate page of Entity
+        List<ProductEntity> listOfProducts = List.of(testEntity, testEntity, testEntity);
+
+        Page<ProductEntity> testPages = new PageImpl<>(listOfProducts, pageable, listOfProducts.size());
+
+        when(mockProductRepository.findAllProductsWithCompositeNameNotNull(pageable)).thenReturn(testPages);
+
+        Page<ProductDTO> result = serviceToTest.getProducts(size, page, sort);
+
+        Assertions.assertNotNull(result);
 
     }
 
@@ -81,5 +142,6 @@ class ProductServiceImplTest {
                 .setPrice(BigDecimal.valueOf(1000d))
                 .setDescription("test description");
     }
+
 
 }
