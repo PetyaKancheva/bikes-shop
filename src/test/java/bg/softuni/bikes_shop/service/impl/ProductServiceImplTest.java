@@ -26,7 +26,7 @@ class ProductServiceImplTest {
     private ProductServiceImpl serviceToTest;
     @Mock
     private ProductRepository mockProductRepository;
-
+    @Mock
     private ApplicationEventPublisher testAppPub;
 
     @BeforeEach
@@ -54,7 +54,7 @@ class ProductServiceImplTest {
     }
 
 //        category, name, description
-    // make in one go
+    // TODO make in one go
 
     @Test
     void testSearchForProductsWithName() {
