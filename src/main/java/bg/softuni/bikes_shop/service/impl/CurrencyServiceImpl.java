@@ -88,7 +88,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Override
     public CurrencyExchangeDTO getCurrencyDTO(HttpServletRequest request,HttpServletResponse response, String cookie) {
           if (cookie != null){
-            compareLocale(request,response,cookie);
+              Locale currentLocale  =localeResolver.resolveLocale(request);
+               compareLocale(request,response,currentLocale,cookie);
           }
 
 
@@ -101,9 +102,8 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
 
     }
-    private void compareLocale(HttpServletRequest request,HttpServletResponse response, String cookie){
-       Locale currentLocale=localeResolver.resolveLocale(request);
-
+    private void compareLocale(HttpServletRequest request,HttpServletResponse response,  Locale currentLocale
+                               ,String cookie){
         if(currentLocale.getCountry().equals("DE") && !cookie.equals("EUR")){
              updateLocale(request,response,cookie);
         };
