@@ -114,15 +114,15 @@ class ProductServiceImplTest {
 
     @Test
     void testGetProducts() {
-        Integer size = 3;
+        Integer size = 1;
         Integer page = 0;
-        String sort = "name:ASC";
+        String sort = "name: asc";
+        
         ProductEntity testEntity = createEntity();
+        Pageable pageable= createPageable(size, page, sort);
 
-        Sort.Order order = new Sort.Order(Sort.Direction.fromString("asc"), "name");
-        Pageable pageable = PageRequest.of(page, size, Sort.by(order));
         // crate page of Entity
-        List<ProductEntity> listOfProducts = List.of(testEntity, testEntity, testEntity);
+        List<ProductEntity> listOfProducts = List.of( testEntity,testEntity,testEntity);
 
         Page<ProductEntity> testPages = new PageImpl<>(listOfProducts, pageable, listOfProducts.size());
 
@@ -131,9 +131,40 @@ class ProductServiceImplTest {
         Page<ProductDTO> result = serviceToTest.getProducts(size, page, sort);
 
         Assertions.assertNotNull(result);
+        Assertions.assertEquals(listOfProducts.size(),result.getTotalPages());
+        Assertions.assertEquals(testEntity.getName(),result.getContent().get(0).name());
 
     }
+    private static Pageable createPageable(Integer size,Integer page, String sort) {
 
+        Sort.Order order = new Sort.Order(Sort.Direction.fromString("asc"), "name");
+        return  PageRequest.of(page, size, Sort.by(order));
+    }
+
+  
+
+
+    @Test
+    void testGetProductsFromCategoryPageable() {
+
+        ProductEntity testEntity = createEntity();
+        Pageable pageable =createPageable(1,0,"name: asc");
+
+        List<ProductEntity> listOfProducts = List.of( testEntity,testEntity,testEntity);
+
+        Page<ProductEntity> testPages = new PageImpl<>(listOfProducts, pageable, listOfProducts.size());
+
+
+        when(mockProductRepository.findByCategory(pageable,testEntity.getCategory())).thenReturn(testPages);
+
+        Page<ProductDTO> result=serviceToTest.getProductsFromCategoryPageable(pageable,testEntity.getCategory());
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(listOfProducts.size(),result.getTotalPages());
+        Assertions.assertEquals(testEntity.getName(),result.getContent().get(0).name());
+
+    } 
+    
     private static ProductEntity createEntity() {
         return new ProductEntity()
                 .setName("test name")
@@ -142,6 +173,4 @@ class ProductServiceImplTest {
                 .setPrice(BigDecimal.valueOf(1000d))
                 .setDescription("test description");
     }
-
-
 }
