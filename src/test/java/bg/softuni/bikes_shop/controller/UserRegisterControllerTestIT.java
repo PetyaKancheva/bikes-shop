@@ -1,11 +1,5 @@
 package bg.softuni.bikes_shop.controller;
 
-import bg.softuni.bikes_shop.model.UserRoleEnum;
-import bg.softuni.bikes_shop.model.dto.UserRegisterDTO;
-import bg.softuni.bikes_shop.model.entity.UserEntity;
-import bg.softuni.bikes_shop.model.entity.UserRoleEntity;
-
-import bg.softuni.bikes_shop.repository.UserRoleRepository;
 import bg.softuni.bikes_shop.service.UserRoleService;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
@@ -26,11 +20,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
