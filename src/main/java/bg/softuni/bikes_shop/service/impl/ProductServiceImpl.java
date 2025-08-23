@@ -37,6 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductDTO> getProducts(Integer size,Integer page, String sort) {
+
         String parameter=sort.split(": ")[0];
         String direction=sort.split(": ")[1];
 
