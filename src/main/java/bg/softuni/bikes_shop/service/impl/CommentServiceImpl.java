@@ -18,22 +18,22 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public String getURLForOneComment(Long id) {
-        return String.valueOf(compileBaseURL() + "{id}");
+        return compileBaseURL() + id;
     }
 
     @Override
     public String getURLForAllComments() {
-        return String.valueOf(compileBaseURL() + "all");
+        return compileBaseURL() + "all";
     }
 
     @Override
     public String getURLForCommentDeletion(Long id) {
-        return String.valueOf(compileBaseURL() + "delete_comment/{id}");
+        return  compileBaseURL() + "delete_comment/" +id;
     }
 
     @Override
     public String getURLForCommentAddition() {
-        return String.valueOf(compileBaseURL() + "add_comment");
+        return  compileBaseURL() + "add_comment";
     }
 
     private String compileBaseURL() {

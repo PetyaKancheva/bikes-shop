@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/login", "/register").permitAll()
                         .requestMatchers("/services", "/contacts", "/about").permitAll()
-                        .requestMatchers("/comment/**", "/comments").permitAll()
+                        .requestMatchers( "/comments/**").permitAll()
                         .requestMatchers("/api/**").permitAll()
                         .requestMatchers("/currency").permitAll()
                         .requestMatchers("/error").permitAll()

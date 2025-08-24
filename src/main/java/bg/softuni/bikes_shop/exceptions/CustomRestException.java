@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.HttpClientErrorException;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class CustomObjectNotFoundException extends RuntimeException {
-    public CustomObjectNotFoundException(String message ){
-        super(message);
+public class CustomRestException extends HttpClientErrorException {
+    public CustomRestException(HttpStatusCode statusCode, String statusText ){
+        super( statusCode,  statusText +"custom text ");
     }
 }
-

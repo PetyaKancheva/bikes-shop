@@ -4,13 +4,18 @@ import bg.softuni.bikes_shop.exceptions.CustomObjectNotFoundException;
 import bg.softuni.bikes_shop.model.dto.CommentDTO;
 import bg.softuni.bikes_shop.service.CommentService;
 import jakarta.validation.Valid;
+import org.hibernate.query.QueryParameter;
+import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/comments")
 public class CommentsRestController {
     private final RestTemplate restTemplate;
     private final CommentService commentService;
@@ -20,28 +25,22 @@ public class CommentsRestController {
         this.commentService = commentService;
     }
 
-    @GetMapping("/api/comment/{id}")
-    public CommentDTO getOneComment(@PathVariable("id") Long id) {
-        Map<String, Long> requestPram = Map.of("id", id);
-        return restTemplate.getForObject(commentService.getURLForOneComment(id), CommentDTO.class, requestPram);
+    @GetMapping("/all")
+    public Object getAll(){
+        return   restTemplate.getForEntity(commentService.getURLForAllComments(),Object[].class);
     }
-    @GetMapping("/api/comments/fetch")
-    public Object fetchAllComments() {
-        return restTemplate.getForEntity(commentService.getURLForAllComments(), Object[].class);
-    }
-
-    @PostMapping("/api/comment/add")
-    public CommentDTO post( CommentDTO commentDTO) {
-
-        return restTemplate.postForObject(commentService.getURLForCommentAddition(), commentDTO, CommentDTO.class);
+    @GetMapping("/comment")
+    public ResponseEntity<CommentDTO> getSingleComment(@RequestParam String id){
+        return  restTemplate.getForEntity(commentService.getURLForOneComment(Long.parseLong(id)), CommentDTO.class);
     }
 
-    @GetMapping("/api/comment/delete/{id}")
-    public void delete(@PathVariable("id") Long id) {
-        System.out.println(commentService.getURLForCommentDeletion(id));
-        restTemplate.delete(commentService.getURLForCommentDeletion(id), id);
+    @GetMapping("/delete")
+    public String deleteComment(@RequestParam String id){
+        String url = commentService.getURLForCommentDeletion(Long.parseLong(id));
+        System.out.println(url);
+          restTemplate.delete(url);
+          return "comment deleted";
     }
-
 
 
 
