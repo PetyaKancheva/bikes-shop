@@ -1,11 +1,10 @@
-package bg.softuni.bikes_shop.controller.rest;
+package bg.softuni.bikes_shop.controller;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockserver.client.MockServerClient;
 import org.mockserver.integration.ClientAndServer;
-import org.mockserver.model.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -82,6 +81,35 @@ class CommentsRestControllerTestIT {
 
 
     }
+    // TODO fix RESTapi
+//    @Test
+//    void testGetOneCommentNotFound() throws Exception {
+//
+//        new MockServerClient(host, port)
+//                .when(
+//                        request()
+//                                .withMethod("GET")
+//                                .withPath("/0")
+//                                .withHeader("Content-type", "application/json")
+////                                .withBody(json("{\"username\": \"foo\", \"password\": \"bar\"}"))
+//                        , exactly(1))
+//                .respond(
+//                        response()
+//                                .withStatusCode(500)
+////                                .withHeaders(
+////                                        new Header("Content-Type", "application/json; charset=utf-8"),
+////                                        new Header("Cache-Control", "public, max-age=86400"))
+////                                .withBody("{ message: 'incorrect username and password combination' }")
+//                                .withDelay(TimeUnit.SECONDS, 1));
+//
+//
+//
+//        mockMvc.perform(MockMvcRequestBuilders.get("/api/comment/0")
+//                .with(csrf())
+//        ).andExpect(status().is4xxClientError());
+//
+//
+//    }
 
 
 

@@ -1,9 +1,9 @@
-package bg.softuni.bikes_shop.service.impl;
+package bg.softuni.bikes_shop.service;
 
-import bg.softuni.bikes_shop.exceptions.CustomObjectNotFoundException;
 import bg.softuni.bikes_shop.model.dto.ProductDTO;
 import bg.softuni.bikes_shop.model.entity.ProductEntity;
 import bg.softuni.bikes_shop.repository.ProductRepository;
+import bg.softuni.bikes_shop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.*;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static org.mockito.Mockito.when;
 

@@ -30,8 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserRegisterControllerTestIT {
     @Autowired
     private MockMvc mockMvc;
-    @Mock
-    private UserRoleService mockUserRoleService;
 
     @Value("${mail.port}")
     private int port;

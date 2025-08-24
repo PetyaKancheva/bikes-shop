@@ -32,7 +32,6 @@ public class ActivationCodeController {
             rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME,ACTIVATION_FAIL_MSG);
         };
 
-
         return "redirect:/";
     }
 }

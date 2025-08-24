@@ -1,9 +1,10 @@
-package bg.softuni.bikes_shop.service.impl;
+package bg.softuni.bikes_shop.service;
 
 import bg.softuni.bikes_shop.model.dto.CurrencyExchangeDTO;
 import bg.softuni.bikes_shop.model.entity.CurrencyEntity;
 import bg.softuni.bikes_shop.repository.CurrencyRepository;
 
+import bg.softuni.bikes_shop.service.impl.CurrencyServiceImpl;
 import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.servlet.LocaleResolver;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
