@@ -1,5 +1,6 @@
 package bg.softuni.bikes_shop.controller;
 
+import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.util.TestDataUtil;
 import bg.softuni.bikes_shop.util.TestUserUtil;
 import org.junit.jupiter.api.AfterEach;
@@ -61,14 +62,13 @@ public class AdminControllerTestIT {
     }
     @Test
     void testAdminUpdateProfileSuccess() throws Exception {
-        String testEmail="b@mail.com";
-        mockMvc.perform(MockMvcRequestBuilders.get("/admin/update/{id}",testEmail)
+
+        UserEntity testUser= testDataUtil.createUserEntity();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/update/{id}",testUser.getEmail())
                         .with(user(testUserUtil.createTestAdmin("admin@mail.com")))
-                        .param("email", testEmail)
-//                . ("adminUpdateDTO",testDataUtil.createTestAdminUpdateDTO())
+                        .param("email", testUser.getEmail())
                         .with(csrf())
-                ).andDo(print());
-//                .andExpect(model().size(1));
-//                .andExpect(view().name("admin-profile"));
+                ).andExpect(view().name("admin-profile"));
     }
 }

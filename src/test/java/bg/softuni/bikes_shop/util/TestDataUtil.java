@@ -46,7 +46,7 @@ public class TestDataUtil {
                         1000d, "testCategory", "urlTest");
 
     }
-    private UserEntity createUser( ) {
+    public UserEntity createUserEntity( ) {
 
         var roleEntities = userRoleRepository.findAllByNameIn(List.of(UserRoleEnum.USER));
         UserEntity newUser = new UserEntity()
@@ -66,7 +66,7 @@ public class TestDataUtil {
         UserActivationCodeEntity newActivationCode= new UserActivationCodeEntity()
                 .setActivationCode("jmCY4WoeBarWrdb")
                 .setCreated( Instant.now())
-                .setUser(createUser());
+                .setUser(createUserEntity());
 
         return activationCodeRepository.save( newActivationCode);
     }
@@ -81,6 +81,7 @@ public class TestDataUtil {
 
         return productRepository.save(newProduct);
     }
+
     public AdminUpdateDTO createTestAdminUpdateDTO(){
         AdminUpdateDTO newDTO = AdminUpdateDTO.empty();
 

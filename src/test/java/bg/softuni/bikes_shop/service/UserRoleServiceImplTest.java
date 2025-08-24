@@ -35,17 +35,15 @@ public class UserRoleServiceImplTest {
 
     @Test
     void testUserRoleIsFoundCorrectly() {
-        //arrange
+
         UserRoleEntity testUserRoleEntity = createUserRoleEntity();
 
         when(mockUserRoleRepository.findByName(UserRoleEnum.valueOf(testUserRoleEntity.getName().name())))
                 .thenReturn(Optional.of(testUserRoleEntity));
 
-        //act
         UserRoleEnum roleName =UserRoleEnum.valueOf("ADMIN");
         UserRoleEntity foundEntity = userRoleServiceTest.getUserRoleByName(roleName).orElseThrow()    ;
 
-        //assert
 
         Assertions.assertNotNull(foundEntity);
         Assertions.assertEquals( foundEntity.getName().name(),roleName.name());
