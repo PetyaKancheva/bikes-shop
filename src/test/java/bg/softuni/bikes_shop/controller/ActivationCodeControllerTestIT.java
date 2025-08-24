@@ -39,9 +39,10 @@ class ActivationCodeControllerTestIT {
 
 
     @Test
-    void  testActivateUserFail() throws Exception {
+    void  testActivateUserNotFound() throws Exception {
+
         mockMvc.perform(MockMvcRequestBuilders.get("/user/activate/")
-                        .param("activation_code","asdasd")
+                        .param("activation_code","aaaaaaaaaaaaaaa")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attribute("message","Not able to activate code."));

@@ -73,6 +73,7 @@ public class TestDataUtil {
     public ProductEntity createTestProduct() {
         ProductEntity newProduct = new ProductEntity()
                 .setName("test product")
+                .setCompositeName("test_product")
                 .setDescription("test description")
                 .setPrice(BigDecimal.valueOf(1000))
                 .setCategory("testCategory")

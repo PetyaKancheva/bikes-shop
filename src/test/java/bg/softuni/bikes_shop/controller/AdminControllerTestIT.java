@@ -67,7 +67,6 @@ public class AdminControllerTestIT {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/admin/update/{id}",testUser.getEmail())
                         .with(user(testUserUtil.createTestAdmin("admin@mail.com")))
-                        .param("email", testUser.getEmail())
                         .with(csrf())
                 ).andExpect(view().name("admin-profile"));
     }
