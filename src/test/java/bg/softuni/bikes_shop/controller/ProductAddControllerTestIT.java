@@ -1,6 +1,8 @@
 package bg.softuni.bikes_shop.controller;
 
+import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.entity.ProductEntity;
+import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.util.TestDataUtil;
 import bg.softuni.bikes_shop.util.TestUserUtil;
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -38,6 +41,17 @@ public class ProductAddControllerTestIT {
     void tearDown() {
         testDataUtil.cleanUp();
         testUserUtil.cleanUp();
+    }
+
+    @Test
+    void testGetPageAddProduct() throws Exception {
+        CustomUserDetails testEmployee = testUserUtil.createTestEmployee("test@mail.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/product/add")
+                        .with(user(testEmployee))
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("product-add"));
     }
 
     @Test

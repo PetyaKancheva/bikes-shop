@@ -19,10 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.validation.BeanPropertyBindingResult;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
@@ -58,7 +59,7 @@ class UserRegisterControllerTestIT {
     }
 
     @Test
-    void testRegistration() throws Exception {
+    void testRegistrationSuccess() throws Exception {
 
 
         mockMvc.perform(MockMvcRequestBuilders.post("/register")
@@ -71,6 +72,8 @@ class UserRegisterControllerTestIT {
                 .param("confirmPassword","test1234")
                 .with(csrf())
         ).andExpect(status().is3xxRedirection())
+                .andExpect(flash().attribute("message",
+                        "Congratulations! You are now registered at Bikes-Shop. Please proceed to authenticate your email address."))
                 .andExpect(view().name("redirect:/register"));
 
 
@@ -84,18 +87,28 @@ class UserRegisterControllerTestIT {
         Assertions.assertEquals(1, registrationMessage.getAllRecipients().length);
         Assertions.assertEquals("ivan@mail.com", registrationMessage.getAllRecipients()[0].toString());
 
-
-
-
     }
     @Test
-    void testGet(){
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/register"))
+    void testGet() throws Exception {
+                 mockMvc.perform(MockMvcRequestBuilders.get("/register"))
                     .andExpect(status().isOk());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    }
+    @Test
+    void testFailRegistrationPassNotMatch() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/register")
+                        .param("email","ivan@mail.com")
+                        .param("firstName","Ivan")
+                        .param("lastName","Ivanov")
+                        .param("address", "Sofia")
+                        .param("country","Bulgaria")
+                        .param("password","test1234")
+                        .param("confirmPassword","" )
+                        .with(csrf())
+                ).andExpect(status().is3xxRedirection())
+                .andExpect(model().attributeHasErrors());
+
+
     }
 
 
