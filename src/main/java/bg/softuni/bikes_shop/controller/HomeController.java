@@ -80,13 +80,6 @@ public class HomeController {
         return "/static/contacts";
     }
 
-    @GetMapping("/api/comments")
-    private String comments(Model model) {
-        if (!model.containsAttribute("commentDTO")) {
-            model.addAttribute("commentDTO", CommentDTO.empty());
-        }
-        return "comments";
-    }
 
     @GetMapping("/error/500")
     private void testError(Model model) {
