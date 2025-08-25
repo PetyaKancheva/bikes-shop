@@ -1,5 +1,6 @@
 package bg.softuni.bikes_shop.controller;
 
+import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.util.TestDataUtil;
 import bg.softuni.bikes_shop.util.TestUserUtil;
@@ -63,10 +64,10 @@ public class AdminControllerTestIT {
     @Test
     void testAdminUpdateProfileSuccess() throws Exception {
 
-        UserEntity testUser= testDataUtil.createUserEntity();
+        CustomUserDetails testAdmin= testUserUtil.createTestAdmin("admin@mail.com");
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/admin/update/{id}",testUser.getEmail())
-                        .with(user(testUserUtil.createTestAdmin("admin@mail.com")))
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/update/{id}",testAdmin.getEmail())
+                        .with(user(testAdmin))
                         .with(csrf())
                 ).andExpect(view().name("admin-profile"));
     }

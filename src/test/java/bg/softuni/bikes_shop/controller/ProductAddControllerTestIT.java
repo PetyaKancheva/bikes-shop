@@ -51,7 +51,20 @@ public class ProductAddControllerTestIT {
                         .with(user(testEmployee))
                         .with(csrf()))
                 .andExpect(status().isOk())
+                .andExpect(model().attributeHasNoErrors() )
                 .andExpect(view().name("product-add"));
+    }
+    @Test
+    void testGetPageAddProductError() throws Exception {
+
+        CustomUserDetails testEmployee = testUserUtil.createTestEmployee("test@mail.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/product/add")
+                        .param("compositeName", "some value")
+                        .with(user(testEmployee))
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeHasErrors());
     }
 
     @Test
@@ -84,6 +97,21 @@ public class ProductAddControllerTestIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/product/add"));
     }
+    @Test
+    @WithMockUser(roles = {"EMPLOYEE"})
+    void testEmployeeAddProductErrorInDTO() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/product/add")
+                        .param("name", "tesName")
+                        .param("description", "Test description")
+                        .param("price", "")
+                        .param("category", "testCategory")
+                        .param("pictureURL", "urlTest")
+                        .with(csrf())
+                )
+                .andExpect(model().attributeHasFieldErrors("price"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/product/add"));
+    }
 
     @Test
     @WithMockUser(roles = {"USER", "ADMIN"})
@@ -97,7 +125,6 @@ public class ProductAddControllerTestIT {
                         .with(csrf())
                 )
                 .andExpect(status().isForbidden());
-
     }
 
 
