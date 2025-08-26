@@ -34,17 +34,14 @@ class ProductServiceImplTest {
 
     @Test
     void getSingleProductCorrectly() {
-        //arrange
 
         ProductEntity testEntity = createEntity();
 
         when(mockProductRepository.findByCompositeName(testEntity.getCompositeName()))
                 .thenReturn(Optional.of(testEntity));
 
-        // act
         ProductDTO foundEntity = serviceToTest.getSingleProduct(testEntity.getCompositeName()).orElseThrow();
 
-        // assert
         Assertions.assertNotNull(foundEntity);
         Assertions.assertEquals(testEntity.getCompositeName(), foundEntity.compositeName());
         Assertions.assertEquals(testEntity.getPrice(), BigDecimal.valueOf(foundEntity.price()));

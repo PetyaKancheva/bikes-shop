@@ -22,4 +22,15 @@ public class ApiExceptionHandler {
 
         return new ModelAndView("error/404");
     }
+
+//    @ExceptionHandler(NullPointerException.class)
+//    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+//    public ModelAndView handleNullPointerExceptionException(final NullPointerException ex) {
+//
+//        Logger logger= LoggerFactory.getLogger(Logger.class);
+//
+//        logger.info("handle NullPointerExceptionException:" +ex.getMessage() ,ex);
+//
+//        return new ModelAndView("error/404");
+//    }
 }

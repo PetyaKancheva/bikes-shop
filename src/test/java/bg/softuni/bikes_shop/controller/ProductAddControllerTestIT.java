@@ -1,11 +1,15 @@
 package bg.softuni.bikes_shop.controller;
 
 import bg.softuni.bikes_shop.model.CustomUserDetails;
+import bg.softuni.bikes_shop.model.dto.ProductAddDTO;
 import bg.softuni.bikes_shop.model.entity.ProductEntity;
+import bg.softuni.bikes_shop.model.entity.UserActivationCodeEntity;
 import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.util.TestDataUtil;
 import bg.softuni.bikes_shop.util.TestUserUtil;
+import jakarta.servlet.ServletException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +17,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.*;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -51,9 +55,10 @@ public class ProductAddControllerTestIT {
                         .with(user(testEmployee))
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeHasNoErrors() )
+                .andExpect(model().attributeHasNoErrors())
                 .andExpect(view().name("product-add"));
     }
+
     @Test
     void testGetPageAddProductError() throws Exception {
 
@@ -97,20 +102,22 @@ public class ProductAddControllerTestIT {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/product/add"));
     }
+
     @Test
     @WithMockUser(roles = {"EMPLOYEE"})
-    void testEmployeeAddProductErrorInDTO() throws Exception {
+    void testAddProductError() throws Exception {
+        CustomUserDetails testEmployee = testUserUtil.createTestEmployee("employee@mail.com");
         mockMvc.perform(MockMvcRequestBuilders.post("/product/add")
-                        .param("name", "tesName")
+                        .param("name", "a")
+                        .param("price", "2")
                         .param("description", "Test description")
-                        .param("price", "")
-                        .param("category", "testCategory")
+                        .param("category", "category")
                         .param("pictureURL", "urlTest")
+                        .with(user(testEmployee))
                         .with(csrf())
-                )
-                .andExpect(model().attributeHasFieldErrors("price"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/product/add"));
+                ).andExpect(model().hasErrors())
+                .andExpect(status().isOk())
+                .andExpect( view().name("product-add"));
     }
 
     @Test

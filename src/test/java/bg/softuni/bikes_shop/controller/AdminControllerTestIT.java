@@ -41,6 +41,7 @@ public class AdminControllerTestIT {
         testDataUtil.cleanUp();
         testUserUtil.cleanUp();
     }
+
     @Test
     void testAdminGetProfileSuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/admin")
@@ -51,6 +52,7 @@ public class AdminControllerTestIT {
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin-profile"));
     }
+
     @Test
     void testAdminGetProfileAccessDenied() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/admin")
@@ -59,16 +61,50 @@ public class AdminControllerTestIT {
                         .with(csrf())
                 )
                 .andExpect(status().isForbidden());
-
     }
+
     @Test
     void testAdminUpdateProfileSuccess() throws Exception {
+        CustomUserDetails testAdmin = testUserUtil.createTestAdmin("admin@mail.com");
 
-        CustomUserDetails testAdmin= testUserUtil.createTestAdmin("admin@mail.com");
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/update/{id}", testAdmin.getEmail())
+                .with(user(testAdmin))
+                .with(csrf())
+        ).andExpect(view().name("admin-profile"));
+    }
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/admin/update/{id}",testAdmin.getEmail())
+    @Test
+    void testGetView() throws Exception {
+        CustomUserDetails testAdmin = testUserUtil.createTestAdmin("admin@mail.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin")
                         .with(user(testAdmin))
                         .with(csrf())
-                ).andExpect(view().name("admin-profile"));
+                ).andExpect(model().attributeExists())
+                .andExpect(view().name("admin-profile"));
+
     }
+
+    @Test
+    void testUpdateProfile() throws Exception {
+        CustomUserDetails testAdmin = testUserUtil.createTestAdmin("admin@mail.com");
+
+        CustomUserDetails testUser = testUserUtil.createTestUser("user@mail.com");
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/update/{id}",testUser.getEmail())
+                .param("UserAdminUpdateDTO.oldEmail",testUser.getEmail())
+                .param("userMainUpdateDTO.firstName","new first name")
+                .param("userMainUpdateDTO.lastName","new last name")
+                .param("userMainUpdateDTO.address","new address")
+                .param("userMainUpdateDTO.email","new@mail.com")
+                .param("UserAdminUpdateDTO.roles","ROLE_USER")
+                .param("UserAdminUpdateDTO.newPassword","newPassword")
+
+                .with(user(testAdmin))
+                .with(csrf())
+
+        ).andExpect(status().isOk());
+
+
+    }
+
 }
