@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -95,8 +97,9 @@ public class AdminControllerTestIT {
                 .param("userMainUpdateDTO.firstName","new first name")
                 .param("userMainUpdateDTO.lastName","new last name")
                 .param("userMainUpdateDTO.address","new address")
-                .param("userMainUpdateDTO.email","new@mail.com")
-                .param("UserAdminUpdateDTO.roles","ROLE_USER")
+                .param("userMainUpdateDTO.email","newas@mail.com")
+                .param("UserAdminUpdateDTO.roles" ,"USER")
+                .param("UserAdminUpdateDTO.newPassword","newPassword")
                 .param("UserAdminUpdateDTO.newPassword","newPassword")
 
                 .with(user(testAdmin))
