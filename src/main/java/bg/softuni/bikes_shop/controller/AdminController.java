@@ -3,6 +3,8 @@ package bg.softuni.bikes_shop.controller;
 import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.UserRoleEnum;
 import bg.softuni.bikes_shop.model.dto.AdminUpdateDTO;
+import bg.softuni.bikes_shop.model.dto.UserAdminUpdateDTO;
+import bg.softuni.bikes_shop.model.dto.UserMainUpdateDTO;
 import bg.softuni.bikes_shop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,9 +37,8 @@ public class AdminController {
 
     @GetMapping("/admin")
     private String view(Model model) {
-
-        if (!model.containsAttribute("adminUpdateDTO")) {
-            model.addAttribute("adminUpdateDTO", AdminUpdateDTO.empty());
+        if (!model.containsAttribute("userAdminUpdateDTO")) {
+            model.addAttribute("userAdminUpdateDTO", UserAdminUpdateDTO.empty());
         }
 
         return "admin-profile";
@@ -50,8 +51,8 @@ public class AdminController {
             model.addAttribute("listPeople", userService.getAllByEmailFirsOrLastName(personToSearch));
         }
 
-        if (!model.containsAttribute("adminUpdateDTO")) {
-            model.addAttribute("adminUpdateDTO", AdminUpdateDTO.empty());
+        if (!model.containsAttribute("userAdminUpdateDTO")) {
+            model.addAttribute("userAdminUpdateDTO", UserAdminUpdateDTO.empty());
         }
 
 
@@ -64,35 +65,32 @@ public class AdminController {
         if (email.isEmpty()) {
             return "admin-profile";
         }
-
-        if (!model.containsAttribute("adminUpdateDTO")) {
-            model.addAttribute("adminUpdateDTO",
-                    userService.getAdminDTO(email));
+        if (!model.containsAttribute("userAdminUpdateDTO")) {
+            model.addAttribute("userAdminUpdateDTO",
+                    userService.getUserAdminUpdateDTO(email));
         }
-
         return "admin-profile";
 
     }
 
     @PostMapping("/admin/update/{id}")
     private String updateProfile(Principal principal, @PathVariable("id") String oldEmail,
-                                 @Valid AdminUpdateDTO adminUpdateDTO
-            , BindingResult bindingResult, RedirectAttributes rAtt) {
+                                 @Valid UserAdminUpdateDTO userAdminUpdateDTO, BindingResult bindingResult, RedirectAttributes rAtt) {
 
         if (bindingResult.hasErrors()) {
-            rAtt.addFlashAttribute("adminUpdateDTO", adminUpdateDTO);
-            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.adminUpdateDTO", bindingResult);
+            rAtt.addFlashAttribute("userAdminUpdateDTO", userAdminUpdateDTO);
+            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.userAdminUpdateDTO", bindingResult);
+
             return "redirect:/admin/update/{id}";
         }
 
-        userService.updateByAdmin(adminUpdateDTO, oldEmail);
-
+        userService.updateByAdmin(userAdminUpdateDTO, oldEmail);
 
         if (principal.getName().equals(oldEmail)) {
             rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
             return "redirect:/login?logout";
         } else {
-            rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, String.format(SUCCESSFULLY_UPDATED_USER_MSG, adminUpdateDTO.userMainUpdateDTO().firstName()));
+            rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, String.format(SUCCESSFULLY_UPDATED_USER_MSG, userAdminUpdateDTO.firstName()));
             return "redirect:/admin";
         }
 

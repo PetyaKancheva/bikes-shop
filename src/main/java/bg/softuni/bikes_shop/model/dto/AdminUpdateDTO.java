@@ -9,4 +9,6 @@ public record AdminUpdateDTO(
         return new AdminUpdateDTO(UserMainUpdateDTO.empty(), UserAdminUpdateDTO.empty());
     }
 
+    public AdminUpdateDTO {
+    }
 }

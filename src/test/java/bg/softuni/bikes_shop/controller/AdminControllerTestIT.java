@@ -4,10 +4,13 @@ import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.util.TestDataUtil;
 import bg.softuni.bikes_shop.util.TestUserUtil;
+import com.icegreen.greenmail.util.GreenMail;
+import com.icegreen.greenmail.util.ServerSetup;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,9 +33,26 @@ public class AdminControllerTestIT {
     @Autowired
     private TestDataUtil testDataUtil;
 
+    @Value("${mail.port}")
+    private int port;
+
+    @Value("${mail.host}")
+    private String host;
+
+    @Value("${mail.username}")
+    private String username;
+
+    @Value("${mail.password}")
+    private String password;
+
+    private GreenMail greenMail;
 
     @BeforeEach
     void setUp() {
+
+        greenMail = new GreenMail(new ServerSetup(port,host,"smtp"));
+        greenMail.start();
+        greenMail.setUser(username,password);
         testDataUtil.cleanUp();
         testUserUtil.cleanUp();
 
@@ -40,6 +60,7 @@ public class AdminControllerTestIT {
 
     @AfterEach
     void tearDown() {
+        greenMail.stop();
         testDataUtil.cleanUp();
         testUserUtil.cleanUp();
     }
@@ -92,21 +113,24 @@ public class AdminControllerTestIT {
         CustomUserDetails testAdmin = testUserUtil.createTestAdmin("admin@mail.com");
 
         CustomUserDetails testUser = testUserUtil.createTestUser("user@mail.com");
-        mockMvc.perform(MockMvcRequestBuilders.post("/admin/update/{id}",testUser.getEmail())
-                .param("UserAdminUpdateDTO.oldEmail",testUser.getEmail())
-                .param("userMainUpdateDTO.firstName","new first name")
-                .param("userMainUpdateDTO.lastName","new last name")
-                .param("userMainUpdateDTO.address","new address")
-                .param("userMainUpdateDTO.email","newas@mail.com")
-                .param("UserAdminUpdateDTO.roles" ,"USER")
-                .param("UserAdminUpdateDTO.newPassword","newPassword")
-                .param("UserAdminUpdateDTO.newPassword","newPassword")
 
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/update/{id}",testUser.getEmail())
+                .param("oldEmail",testUser.getEmail())
+                .param("firstName","new first name")
+                .param("lastName","new last name")
+                .param("address","new address")
+                .param("newEmail","new@mail.com")
+                .param("roles" ,"USER")
+                .param("newPassword","test125")
                 .with(user(testAdmin))
                 .with(csrf())
 
-        ).andExpect(status().isOk());
+        ).andExpect(status().is3xxRedirection());
 
+        greenMail.waitForIncomingEmail(1);
+
+    //TODO add greenmail expectations
 
     }
 
