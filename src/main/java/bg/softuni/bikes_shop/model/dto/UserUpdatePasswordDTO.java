@@ -1,6 +1,7 @@
 package bg.softuni.bikes_shop.model.dto;
 
 
+import bg.softuni.bikes_shop.model.validation.annotation.FieldsMatching;
 import bg.softuni.bikes_shop.model.validation.annotation.FieldsMisMatching;
 import bg.softuni.bikes_shop.model.validation.annotation.PasswordIsFound;
 import bg.softuni.bikes_shop.model.validation.annotation.PasswordMatch;
@@ -9,26 +10,31 @@ import jakarta.validation.constraints.NotEmpty;
 
 
 @PasswordIsFound(
-        email = "oldEmail",
+        email = "currentEmail",
         password = "oldPassword"
 )
 @FieldsMisMatching(
         firstField = "oldPassword",
         secondField = "newPassword"
 )
-public record UserSelfUpdateDTO(
+@FieldsMatching(
+        firstField = "newPassword",
+        secondField = "confirmPassword"
+)
+public record UserUpdatePasswordDTO(
         @NotEmpty
-        String oldEmail,
-
+        String currentEmail,
         @PasswordMatch
         String oldPassword,
-
         @PasswordMatch
-        String newPassword
+        String newPassword,
+        @PasswordMatch
+        String confirmPassword
+
 ) {
 
-    public static UserSelfUpdateDTO empty() {
+    public static UserUpdatePasswordDTO empty() {
         return
-                new UserSelfUpdateDTO(null, null, null);
+                new UserUpdatePasswordDTO(null, null, null,null);
     }
 }

@@ -1,8 +1,7 @@
 package bg.softuni.bikes_shop.controller;
 
 
-import bg.softuni.bikes_shop.model.dto.UserSelfUpdateDTO;
-import bg.softuni.bikes_shop.model.dto.UserUpdateDTO;
+import bg.softuni.bikes_shop.model.dto.UserUpdateMainDetailsDTO;
 import bg.softuni.bikes_shop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -29,27 +28,27 @@ public class UserProfileController {
     private String profileGet(Principal principal, Model model) {
 
         if (!model.containsAttribute("userUpdateDTO")) {
-            model.addAttribute("userUpdateDTO",
-                    new UserUpdateDTO(
-                            userService.getUserMainUpdateDTO(principal.getName()),
-                            new UserSelfUpdateDTO(principal.getName(), "", "")));
+//            model.addAttribute("userUpdateDTO",
+//                    new UserUpdaterMainDetailsDTO(
+//                            userService.getUserMainUpdateDTO(principal.getName()),
+//                            new UserUpdatePasswordDTO(principal.getName(), "", "")));
         }
 
         return "user-profile";
     }
 
     @PostMapping("/user")
-    private String profileUpdate(Principal principal, @Valid UserUpdateDTO userUpdateDTO,
+    private String mainProfileUpdate(Principal principal, @Valid UserUpdateMainDetailsDTO userUpdateMainDetailsDTO,
                                  BindingResult bindingResult, RedirectAttributes rAtt) {
         System.out.println();
 
         if (bindingResult.hasErrors()) {
-            rAtt.addFlashAttribute("userUpdateDTO", userUpdateDTO);
-            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.userUpdateDTO", bindingResult);
+            rAtt.addFlashAttribute("updateUserMainDetailsDTO", userUpdateMainDetailsDTO);
+            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.updateUserMainDetailsDTO", bindingResult);
             return "redirect:/user";
         }
 
-        userService.updateByUser(userUpdateDTO, principal.getName());
+        userService.updateMainUserDetails(userUpdateMainDetailsDTO);
 
         rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
 

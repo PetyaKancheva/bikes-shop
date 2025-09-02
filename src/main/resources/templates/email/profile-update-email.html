@@ -8,14 +8,18 @@
     <title>Hello</title>
 </head>
 <body>
-<h3>Hello, <th:block th:text="${user_first_name}">Petya</th:block>!</h3>
+<h3>Hello, <th:block th:text="${user_first_name}">Customer</th:block>!</h3>
 
-We have identified an update to your Bikes-Shop account at: <th:block th:text="${timeOfUpdate}"></th:block>.
-
+We have identified an update to your Bikes-Shop account at: <th:block th:text="${timeOfUpdate}">TIMESTAMP</th:block>.
+<br>
+<br>
 If that was you, no further action is required.
-
-If that was not you, please immediately contact us at service@bikes-shop.com
-
+<br>
+<br>
+If that was not you, please immediately contact us at service@bikes-shop.com.
+<br>
+<br>
+<br>
 Your Bikes-Shop!
 
 </body>

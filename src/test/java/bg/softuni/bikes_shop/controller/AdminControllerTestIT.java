@@ -6,7 +6,9 @@ import bg.softuni.bikes_shop.util.TestDataUtil;
 import bg.softuni.bikes_shop.util.TestUserUtil;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
+import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,9 +131,14 @@ public class AdminControllerTestIT {
         ).andExpect(status().is3xxRedirection());
 
         greenMail.waitForIncomingEmail(1);
+        MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
 
-    //TODO add greenmail expectations
+        Assertions.assertEquals(1, receivedMessages.length);
+        MimeMessage registrationMessage = receivedMessages[0];
 
+        Assertions.assertTrue(registrationMessage.getContent().toString().contains("updated"));
+        Assertions.assertEquals(1, registrationMessage.getAllRecipients().length);
+        Assertions.assertEquals("new@mail.com", registrationMessage.getAllRecipients()[0].toString());
     }
 
 }

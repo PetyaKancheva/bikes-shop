@@ -44,8 +44,6 @@ class OrderServiceImplTest {
     @Mock
     private CurrentOrder mockCurrentOrder;
     @Mock
-    private OrderDTO mockOrderDTO;
-    @Mock
     OrderEntity mockOrder;
 
 

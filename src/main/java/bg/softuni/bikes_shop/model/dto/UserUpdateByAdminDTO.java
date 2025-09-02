@@ -1,19 +1,17 @@
 package bg.softuni.bikes_shop.model.dto;
 
 import bg.softuni.bikes_shop.model.validation.annotation.PasswordMatch;
-import bg.softuni.bikes_shop.model.validation.annotation.UniqueEmail;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-public record UserAdminUpdateDTO(
+public record UserUpdateByAdminDTO(
         @NotEmpty
         String oldEmail,
         @NotEmpty(message = "Must be populated.")
         @Email(message = "Must be an e-mail format.")
-        @UniqueEmail
         String newEmail,
         @NotEmpty
         List<String> roles,
@@ -28,9 +26,8 @@ public record UserAdminUpdateDTO(
         String country) {
 
 
-    public static UserAdminUpdateDTO empty() {
-        return
-                new UserAdminUpdateDTO(null, null, null,null,null,null
+    public static UserUpdateByAdminDTO empty() {
+        return new UserUpdateByAdminDTO(null, null, null,null,null,null
                 ,null, null);
     }
 }

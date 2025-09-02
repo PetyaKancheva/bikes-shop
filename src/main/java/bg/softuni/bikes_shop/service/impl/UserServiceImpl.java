@@ -19,8 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 
 
 @Service
@@ -51,26 +49,27 @@ public class UserServiceImpl implements UserService {
                 "UserService", userRegisterDTO.email(), userRegisterDTO.firstName()));
     }
 
-    @Override
-    public void updateByUser(UserUpdateDTO userUpdateDTO, String email) {
-//        TODO fix with polymorphism
-
-
-//        UserEntity updatedUser = getExistingUser(email);
-        // fix
-
-//        updateMainUserDetails(userUpdateDTO.userMainUpdateDTO() , updatedUser);
-
-//        updatedUser.setPassword(passwordEncoder.encode(userUpdateDTO.userSelfUpdateDTO().newPassword()));
+//    @Override
+//    public void updateByUser(Useru userUpdateDTO) {
+////        TODO fix with polymorphism
 //
-//        appEventPublisher.publishEvent(
-//                new UserUpdateProfileEvent("UserService-Update",
-//                        userUpdateDTO.userMainUpdateDTO().email(),
-//                        userUpdateDTO.userMainUpdateDTO().firstName(),
-//                        String.valueOf(Instant.now())));
 //
-//        userRepository.save(updatedUser);
-    }
+////        UserEntity updatedUser = getExistingUser(email);
+//        // fix
+//
+////        updateMainUserDetails(userUpdateDTO.userMainUpdateDTO() , updatedUser);
+//
+
+    /// /        updatedUser.setPassword(passwordEncoder.encode(userUpdateDTO.userSelfUpdateDTO().newPassword()));
+    /// /
+    /// /        appEventPublisher.publishEvent(
+    /// /                new UserUpdateProfileEvent("UserService-Update",
+    /// /                        userUpdateDTO.userMainUpdateDTO().email(),
+    /// /                        userUpdateDTO.userMainUpdateDTO().firstName(),
+    /// /                        String.valueOf(Instant.now())));
+    /// /
+    /// /        userRepository.save(updatedUser);
+//    }
 //
 //    @Override
 //    public void updateByAdmin(AdminUpdateDTO adminUpdateDTO, String email) {
@@ -90,32 +89,31 @@ public class UserServiceImpl implements UserService {
 //
 //        userRepository.save(updatedUser);
 //    }
-
     @Override
-    public void updateByAdmin(UserAdminUpdateDTO userAdminUpdateDTO, String oldEmail) {
+    public void updateByAdmin(UserUpdateByAdminDTO userUpdateByAdminDTO) {
 
-        UserEntity updatedUser = getExistingUser(oldEmail);
-        updateMainUserDetails(userAdminUpdateDTO, updatedUser);
+        UserEntity updatedUser = getExistingUser(userUpdateByAdminDTO.oldEmail());
+        updateMainUserDetails(userUpdateByAdminDTO, updatedUser);
         updatedUser.getRoles().clear();
-        updatedUser.getRoles().addAll(getRolesFromString(userAdminUpdateDTO));
+        updatedUser.getRoles().addAll(getRolesFromString(userUpdateByAdminDTO));
 
-        updatedUser.setPassword(passwordEncoder.encode(userAdminUpdateDTO.newPassword()));
+        updatedUser.setPassword(passwordEncoder.encode(userUpdateByAdminDTO.newPassword()));
 
         appEventPublisher.publishEvent(
                 new UserUpdateProfileEvent("UserService-Update",
-                        userAdminUpdateDTO.newEmail(),
-                        userAdminUpdateDTO.firstName(),
+                        userUpdateByAdminDTO.newEmail(),
+                        userUpdateByAdminDTO.firstName(),
                         String.valueOf(Instant.now())));
 
         userRepository.save(updatedUser);
     }
 
-    private void updateMainUserDetails(UserAdminUpdateDTO userAdminUpdateDTO, UserEntity updatedUser) {
-        updatedUser.setEmail(userAdminUpdateDTO.newEmail());
-        updatedUser.setFirstName(userAdminUpdateDTO.firstName());
-        updatedUser.setLastName(userAdminUpdateDTO.lastName());
-        updatedUser.setAddress(userAdminUpdateDTO.address());
-        updatedUser.setCountry(userAdminUpdateDTO.country());
+    private void updateMainUserDetails(UserUpdateByAdminDTO userUpdateByAdminDTO, UserEntity updatedUser) {
+        updatedUser.setEmail(userUpdateByAdminDTO.newEmail());
+        updatedUser.setFirstName(userUpdateByAdminDTO.firstName());
+        updatedUser.setLastName(userUpdateByAdminDTO.lastName());
+        updatedUser.setAddress(userUpdateByAdminDTO.address());
+        updatedUser.setCountry(userUpdateByAdminDTO.country());
     }
 
 
@@ -127,21 +125,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<ShortUserDTO> getAllByEmailFirsOrLastName(String searchWord) {
+    public List<ShortUserProfileDTO> getAllByEmailFirsOrLastName(String searchWord) {
         return userRepository.findAllByEmailFirsOrLastName
                 (searchWord).stream().map(UserServiceImpl::mapToShortDTO).toList();
     }
 
     @Override
-    public UserAdminUpdateDTO getUserAdminUpdateDTO(String email) {
-        return mapToUserAdminUpdateDTO(getExistingUser(email));
+    public UserUpdateByAdminDTO getUserAdminUpdateDTO(String email) {
+        return mapToUserUpdateByAdminDTO(getExistingUser(email));
     }
 
     @Override
-    public UserMainUpdateDTO getUserMainUpdateDTO(String email) {
-        return mapToMainDTO(getExistingUser(email));
+    public UserUpdateMainDetailsDTO getUserMainUpdateDTO(String email) {
+        return null;
     }
 
+    @Override
+    public void updateMainUserDetails(UserUpdateMainDetailsDTO userUpdateMainDetailsDTO) {
+
+    }
+
+//    @Override
+//    public UserUpdateMainDetails getUserMainUpdateDTO(String email) {
+//        return mapToMainDTO(getExistingUser(email));
+//    }
+
+
+    public void updateMainProfile(UserUpdateMainDetailsDTO userUpdateMainDetailsDTO, String email) {
+
+    }
+
+    @Override
+    public void updateEmail(UserUpdateEmailDTO userUpdateEmailDTO, String oldEmail) {
+
+    }
+
+    @Override
+    public void updatePassword(UserUpdatePasswordDTO userUpdatePasswordDTO) {
+
+    }
 
     @Override
     public boolean isUniqueEmail(String value) {
@@ -156,8 +178,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private List<UserRoleEntity> getRolesFromString(UserAdminUpdateDTO userAdminUpdateDTO) {
-        return userAdminUpdateDTO
+    private List<UserRoleEntity> getRolesFromString(UserUpdateByAdminDTO userUpdateByAdminDTO) {
+        return userUpdateByAdminDTO
                 .roles().stream().map(role -> userRoleService.getUserRoleByName(UserRoleEnum.valueOf(role))
                         .orElseThrow(() -> new CustomObjectNotFoundException("Roles not found"))).toList();
     }
@@ -179,28 +201,33 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private static ShortUserDTO mapToShortDTO(UserEntity u) {
-        return new ShortUserDTO(
+    private static ShortUserProfileDTO mapToShortDTO(UserEntity u) {
+        return new ShortUserProfileDTO(
                 u.getEmail(),
                 u.getFirstName(),
                 u.getLastName());
     }
 
-    private static UserMainUpdateDTO mapToMainDTO(UserEntity u) {
-        return new UserMainUpdateDTO(
+//    private static UserUpdateMainDetails mapToMainDTO(UserEntity u) {
+//        return new UserUpdateMainDetails(
+//                u.getEmail(),
+//                u.getFirstName(),
+//                u.getLastName(),
+//                u.getAddress(),
+//                u.getCountry());
+//
+//    }
+
+    private static UserUpdateByAdminDTO mapToUserUpdateByAdminDTO(UserEntity u) {
+        return new UserUpdateByAdminDTO(
                 u.getEmail(),
+                u.getEmail(),
+                u.getRoles().stream().map(ur -> ur.getName().name()).toList(),
+                "newPassword",
                 u.getFirstName(),
                 u.getLastName(),
                 u.getAddress(),
                 u.getCountry());
-
-    }
-
-    private static UserAdminUpdateDTO mapToUserAdminUpdateDTO(UserEntity u) {
-        return new UserAdminUpdateDTO(
-                u.getEmail(), "newEmail",
-                u.getRoles().stream().map(ur -> ur.getName().name()).toList(), "newPassword",
-                u.getFirstName(), u.getLastName(), u.getAddress(), u.getCountry());
 
     }
 

@@ -2,24 +2,24 @@ package bg.softuni.bikes_shop.service;
 
 import bg.softuni.bikes_shop.model.dto.*;
 import bg.softuni.bikes_shop.model.events.UserUpdateProfileEvent;
-import org.apache.catalina.UserDatabase;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
     void register(UserRegisterDTO userRegisterDTO);
 
     void notify(UserUpdateProfileEvent event);
 
-    List<ShortUserDTO> getAllByEmailFirsOrLastName(String searchWord);
+    List<ShortUserProfileDTO> getAllByEmailFirsOrLastName(String searchWord);
 
-    UserAdminUpdateDTO getUserAdminUpdateDTO(String email);
-    UserMainUpdateDTO getUserMainUpdateDTO(String email);
+    UserUpdateByAdminDTO getUserAdminUpdateDTO(String email);
+    UserUpdateMainDetailsDTO getUserMainUpdateDTO(String email);
 
-    void updateByUser(UserUpdateDTO userUpdateDTO, String email);
+    void updateMainUserDetails(UserUpdateMainDetailsDTO userUpdateMainDetailsDTO);
+    void updateEmail( UserUpdateEmailDTO userUpdateEmailDTO, String oldEmail);
+    void updatePassword(UserUpdatePasswordDTO userUpdatePasswordDTO);
 
-    void updateByAdmin(UserAdminUpdateDTO userAdminUpdateDTO,  String email);
+    void updateByAdmin(UserUpdateByAdminDTO userUpdateByAdminDTO);
 
     boolean isUniqueEmail(String email);
 

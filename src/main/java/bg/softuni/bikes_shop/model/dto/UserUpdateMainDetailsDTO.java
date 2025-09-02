@@ -1,16 +1,12 @@
 package bg.softuni.bikes_shop.model.dto;
 
-import bg.softuni.bikes_shop.model.validation.annotation.UniqueEmail;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 
-public record UserMainUpdateDTO(
-        @NotEmpty(message = "Must be populated.")
-        @Email(message = "Must be an e-mail format.")
-        @UniqueEmail
-        String email,
+public record UserUpdateMainDetailsDTO(
+        @NotEmpty
+        String currentEmail,
         @Size(min = 3, max = 15, message = "Must be between 3 and 15 characters.")
         String firstName,
         @Size(min = 3, max = 15, message = "Must be between 3 and 15 characters.")
@@ -20,7 +16,7 @@ public record UserMainUpdateDTO(
         String country
 
 ) {
-    public static UserMainUpdateDTO empty() {
-        return new UserMainUpdateDTO(null, null, null, null, null);
+    public static UserUpdateMainDetailsDTO empty() {
+        return new UserUpdateMainDetailsDTO(null, null, null, null, null);
     }
 }

@@ -1,7 +1,6 @@
 package bg.softuni.bikes_shop.util;
 
 import bg.softuni.bikes_shop.model.UserRoleEnum;
-import bg.softuni.bikes_shop.model.dto.AdminUpdateDTO;
 import bg.softuni.bikes_shop.model.dto.ProductAddDTO;
 import bg.softuni.bikes_shop.model.entity.*;
 import bg.softuni.bikes_shop.repository.*;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
 import java.time.Instant;
 import java.util.List;
 
@@ -82,14 +80,6 @@ public class TestDataUtil {
 
         return productRepository.save(newProduct);
     }
-
-    public AdminUpdateDTO createTestAdminUpdateDTO(){
-        AdminUpdateDTO newDTO = AdminUpdateDTO.empty();
-
-        return newDTO;
-    }
-
-    //
 
     public void cleanUp() {
         currencyRepository.deleteAll();

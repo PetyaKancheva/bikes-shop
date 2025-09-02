@@ -44,16 +44,16 @@
             </div>
             <h4 class="col border-bottom">Selected person:</h4>
 
-            <span> current roles:<th:block th:text="${userAdminUpdateDTO.roles()}?:' No Roles' "></th:block> </span>
+            <span> current roles:<th:block th:text="${userUpdateByAdminDTO.roles()}?:' No Roles' "></th:block> </span>
 
             <form id="admin-update-user-profile-form"
                   th:action="@{/admin/update/{id}(id=*{oldEmail})}"
                   th:method="POST"
-                  th:object="${userAdminUpdateDTO}"
+                  th:object="${userUpdateByAdminDTO}"
 
                   class=" mx-auto col-md-12 flex-column justify-content-center ">          <!--  object 1  -->
-
-                <input  type= "hidden"  th:name="oldEmail" th:value="*{oldEmail}">
+                <!-- type= "hidden" -->
+                <input    th:name="oldEmail" th:value="*{oldEmail}">
                 <p th:if="${#fields.hasErrors('oldEmail')}"
                    th:errors="*{oldEmail}"></p>
 
@@ -132,7 +132,7 @@
                            th:name="newEmail"
                            th:errorclass="is-invalid"
                            type="text"
-                           th:field="*{oldEmail}"
+                           th:field="*{newEmail}"
                            class="form-control"
                            placeholder="New email address..."/>
                     <p th:if="${#fields.hasErrors('newEmail')}" th:errors="*{newEmail}"
@@ -153,7 +153,7 @@
                 </div>
 
 
-                <div th:classappend="${userAdminUpdateDTO.oldEmail==null?'invisible' : ''}" class="button-holder justify-content-center m-auto d-flex">
+                <div th:classappend="${userUpdateByAdminDTO.oldEmail==null?'invisible' : ''}" class="button-holder justify-content-center m-auto d-flex">
 
                     <input type="submit" class="btn btn-warning btn-block  " value="Update profile"/>
 

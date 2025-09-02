@@ -1,13 +1,9 @@
 package bg.softuni.bikes_shop.controller;
 
-import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.UserRoleEnum;
-import bg.softuni.bikes_shop.model.dto.AdminUpdateDTO;
-import bg.softuni.bikes_shop.model.dto.UserAdminUpdateDTO;
-import bg.softuni.bikes_shop.model.dto.UserMainUpdateDTO;
+import bg.softuni.bikes_shop.model.dto.UserUpdateByAdminDTO;
 import bg.softuni.bikes_shop.service.UserService;
 import jakarta.validation.Valid;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,8 +33,8 @@ public class AdminController {
 
     @GetMapping("/admin")
     private String view(Model model) {
-        if (!model.containsAttribute("userAdminUpdateDTO")) {
-            model.addAttribute("userAdminUpdateDTO", UserAdminUpdateDTO.empty());
+        if (!model.containsAttribute("userUpdateByAdminDTO")) {
+            model.addAttribute("userUpdateByAdminDTO", UserUpdateByAdminDTO.empty());
         }
 
         return "admin-profile";
@@ -51,8 +47,8 @@ public class AdminController {
             model.addAttribute("listPeople", userService.getAllByEmailFirsOrLastName(personToSearch));
         }
 
-        if (!model.containsAttribute("userAdminUpdateDTO")) {
-            model.addAttribute("userAdminUpdateDTO", UserAdminUpdateDTO.empty());
+        if (!model.containsAttribute("userUpdateByAdminDTO")) {
+            model.addAttribute("userUpdateByAdminDTO", UserUpdateByAdminDTO.empty());
         }
 
 
@@ -60,37 +56,37 @@ public class AdminController {
     }
 
     @GetMapping("/admin/update/{id}")
-    private String selectUser(@PathVariable("id") String email, Model model) {
+    private String selectUser(@PathVariable("id") String currentEmail, Model model) {
 
-        if (email.isEmpty()) {
+        if (currentEmail.isEmpty()) {
             return "admin-profile";
         }
-        if (!model.containsAttribute("userAdminUpdateDTO")) {
-            model.addAttribute("userAdminUpdateDTO",
-                    userService.getUserAdminUpdateDTO(email));
+        if (!model.containsAttribute("userUpdateByAdminDTO")) {
+            model.addAttribute("userUpdateByAdminDTO",
+                    userService.getUserAdminUpdateDTO(currentEmail));
         }
         return "admin-profile";
 
     }
 
     @PostMapping("/admin/update/{id}")
-    private String updateProfile(Principal principal, @PathVariable("id") String oldEmail,
-                                 @Valid UserAdminUpdateDTO userAdminUpdateDTO, BindingResult bindingResult, RedirectAttributes rAtt) {
+    private String updateProfile(Principal principal, @PathVariable("id") String currentEmail,
+                                 @Valid UserUpdateByAdminDTO userUpdateByAdminDTO, BindingResult bindingResult, RedirectAttributes rAtt) {
 
         if (bindingResult.hasErrors()) {
-            rAtt.addFlashAttribute("userAdminUpdateDTO", userAdminUpdateDTO);
-            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.userAdminUpdateDTO", bindingResult);
+            rAtt.addFlashAttribute("userUpdateByAdminDTO", userUpdateByAdminDTO);
+            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.userUpdateByAdminDTO", bindingResult);
 
             return "redirect:/admin/update/{id}";
         }
 
-        userService.updateByAdmin(userAdminUpdateDTO, oldEmail);
+        userService.updateByAdmin(userUpdateByAdminDTO);
 
-        if (principal.getName().equals(oldEmail)) {
+        if (principal.getName().equals(currentEmail)) {
             rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
             return "redirect:/login?logout";
         } else {
-            rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, String.format(SUCCESSFULLY_UPDATED_USER_MSG, userAdminUpdateDTO.firstName()));
+            rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, String.format(SUCCESSFULLY_UPDATED_USER_MSG, userUpdateByAdminDTO.firstName()));
             return "redirect:/admin";
         }
 

@@ -5,11 +5,8 @@ import jakarta.validation.constraints.Size;
 
 public record CommentDTO(
         Long id,
-
         String user_name,
-
         String title,
-
         String body
 
 ) {public static CommentDTO empty(){
