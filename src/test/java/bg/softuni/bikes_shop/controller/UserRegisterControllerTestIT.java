@@ -78,7 +78,7 @@ class UserRegisterControllerTestIT {
 
 
         greenMail.waitForIncomingEmail(1);
-        MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+      th:
 
         Assertions.assertEquals(1, receivedMessages.length);
         MimeMessage registrationMessage = receivedMessages[0];

@@ -44,28 +44,28 @@
             </div>
             <h4 class="col border-bottom">Selected person:</h4>
 
-            <span> current roles:<th:block th:text="${userUpdateByAdminDTO.roles()}?:' No Roles' "></th:block> </span>
-
             <form id="admin-update-user-profile-form"
                   th:action="@{/admin/update/{id}(id=*{oldEmail})}"
                   th:method="POST"
                   th:object="${userUpdateByAdminDTO}"
 
-                  class=" mx-auto col-md-12 flex-column justify-content-center ">          <!--  object 1  -->
-                <!-- type= "hidden" -->
-                <input    th:name="oldEmail" th:value="*{oldEmail}">
+                  class=" mx-auto col-md-12 flex-column justify-content-center ">
+
+                <input   type= "hidden" th:name="oldEmail" th:value="*{oldEmail}">
                 <p th:if="${#fields.hasErrors('oldEmail')}"
                    th:errors="*{oldEmail}"></p>
 
+
+                <div> Roles: </div>
                 <div class="form-check form-check-inline" th:each="r : ${userRoles}">
-                    <input id="inlineCheckbox"
+                    <input id="rolesCheckbox"
                            name="roles"
                            th:errorclass="is-invalid "
                            type="checkbox"
                            class="form-check-input"
-                           th:value="${r}">
-
-                    <label class="form-check-label" for="inlineCheckbox"  th:text="${r}"></label>
+                           th:value="${r}"
+                           th:field="*{roles}">
+                    <label class="form-check-label" for="rolesCheckbox"  th:text="${r}"></label>
                     <p th:if="${#fields.hasErrors('roles')}" th:errors="*{roles}"
                        class="invalid-feedback errors alert alert-danger"></p>
                 </div>

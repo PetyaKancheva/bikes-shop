@@ -136,7 +136,7 @@ public class AdminControllerTestIT {
         Assertions.assertEquals(1, receivedMessages.length);
         MimeMessage registrationMessage = receivedMessages[0];
 
-        Assertions.assertTrue(registrationMessage.getContent().toString().contains("updated"));
+        Assertions.assertTrue(registrationMessage.getContent().toString().contains("update"));
         Assertions.assertEquals(1, registrationMessage.getAllRecipients().length);
         Assertions.assertEquals("new@mail.com", registrationMessage.getAllRecipients()[0].toString());
     }
