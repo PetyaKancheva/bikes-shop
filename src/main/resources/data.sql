@@ -77,7 +77,7 @@ INSERT INTO products (id, category, description, name, picture_url, price)
 VALUES (14, 'chain', 'Gold is the new silver.', 'KMC X10 SL',
         'https://cdn.rosebikes.de/images/06311A08D1FC99E54C0195D6A4A11FE5.png', 37.00);
 
-CREATE FULLTEXT INDEX products_idx ON products(category,name, description);
+
 
 INSERT INTO user_activation_codes (id,activation_code,created,user_id) VALUES (1,'jmCY4WoeBarWrdb','2025-03-19 18:01:48.859525',13);
 INSERT INTO user_activation_codes (id,activation_code,created,user_id) VALUES (2,'iXWVZF3TF19ql61','2025-03-19 18:42:45.757911',14);
