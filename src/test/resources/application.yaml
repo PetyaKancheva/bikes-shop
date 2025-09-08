@@ -3,26 +3,30 @@ spring:
     defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
-      open-in-view: false
-      properties:
-      hibernate:
-        format_sql: true
+    show-sql: true
 
   sql:
     init:
       mode: never
 
-
+#logging:
+#  org:
+#    hibernate:
+#      descriptor: TRACE
+#      SQL: WARN
+#    nodeValue: WARN
+#    blog: WARN
 
 logging:
-  org:
-    hibernate:
-      type:
-        descriptor: TRACE
-      SQL: DEBUG
-    nodeValue: WARN
-    blog: WARN
-
+  level:
+    root: WARN
+    org:
+      springframework:
+        web: WARN
+        jdbc.core: INFO
+      hibernate:
+        type: INFO
+        SQL: INFO
 
 
 
