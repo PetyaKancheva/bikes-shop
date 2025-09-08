@@ -35,10 +35,6 @@ class HomeControllerTestIT {
     @Autowired
     private TestDataUtil testDataUtil;
 
-    @Autowired
-    private ProductRepository productRepository;
-
-
     @BeforeEach
     void setUp() {
         testDataUtil.cleanUp();
@@ -50,10 +46,8 @@ class HomeControllerTestIT {
     }
 
     @Test
-    void getIndexSuccess() throws Exception {
+    void testGetIndexSuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/")
-
-
                         .with(csrf()))
                 .andExpectAll(status().isOk(), view().name("index")
                         , model().attributeExists("products")
@@ -64,32 +58,31 @@ class HomeControllerTestIT {
     }
 
     @Test
-    void getAboutSuccess() throws Exception {
+    void testGetAboutSuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/about"))
                 .andExpectAll(status().isOk(), view().name("/static/about"));
     }
 
     @Test
-    void getServicesSuccess() throws Exception {
+    void testGetServicesSuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/services"))
                 .andExpectAll(status().isOk(), view().name("/static/services"));
     }
 
     @Test
-    void getContactsSuccess() throws Exception {
+    void testGetContactsSuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/contacts"))
                 .andExpectAll(status().isOk(), view().name("/static/contacts"));
     }
 
     @Test
-    void getError500Success() throws Exception {
+    void testGetError500Success() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/error/500"))
                 .andExpect(status().is3xxRedirection());
     }
 
     @Test
-    void getSearchResultSuccess() throws Exception {
-
+    void testGetSearchResultSuccess() throws Exception {
         ProductEntity testProduct = testDataUtil.createTestProduct();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/search-result")
@@ -97,6 +90,25 @@ class HomeControllerTestIT {
                         .with(csrf()))
                 .andExpect(status().isOk());
 
+
     }
 
+    @Test
+    void testGetSearchResultFail() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/search-result")
+                        .param("productToSearch", "something")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpectAll(flash().attributeExists("message"));
+    }
+
+    @Test
+    void testChangeCurrencyBGN() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/currency")
+                        .param("selectedCurrency", "BGN")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(cookie().value("currency","BGN"));
+
+    }
 }
