@@ -54,19 +54,17 @@ class ProductServiceImplTest {
     @Test
     void testSearchForProductsWithName() {
         ProductEntity testEntity = createEntity();
-
-//        category, name, description
-
         // crate page of Entity
+        String name= testEntity.getName();
         Page<ProductEntity> testPages = new PageImpl<ProductEntity>(List.of(testEntity), Pageable.unpaged(), 1);
 
-        when(mockProductRepository.findAllByKeyword(testEntity.getName(), Pageable.unpaged()))
+        when(mockProductRepository.searchAllByDescriptionContainingOrCategoryOrNameContaining(name,name,name, Pageable.unpaged()))
                 .thenReturn(testPages);
 
-        Page<ProductDTO> foundResultName = serviceToTest.searchForProducts(testEntity.getName());
+        Page<ProductDTO> result = serviceToTest.searchForProducts(testEntity.getName());
 
-        Assertions.assertEquals(1, foundResultName.getTotalElements());
-        Assertions.assertEquals(testEntity.getName(), foundResultName.getContent().getFirst().name());
+        Assertions.assertEquals(1, result.getTotalElements());
+        Assertions.assertEquals(name, result.getContent().getFirst().name());
 
 
     }
@@ -74,19 +72,17 @@ class ProductServiceImplTest {
     @Test
     void testSearchForProductsWithCategory() {
         ProductEntity testEntity = createEntity();
-
-//        category, name, description
-
         // crate page of Entity
-        Page<ProductEntity> testPages = new PageImpl<>(List.of(testEntity), Pageable.unpaged(), 1);
+        String category= testEntity.getCategory();
+        Page<ProductEntity> testPages = new PageImpl<ProductEntity>(List.of(testEntity), Pageable.unpaged(), 1);
 
-        when(mockProductRepository.findAllByKeyword(testEntity.getCategory(), Pageable.unpaged()))
+        when(mockProductRepository.searchAllByDescriptionContainingOrCategoryOrNameContaining(category,category,category, Pageable.unpaged()))
                 .thenReturn(testPages);
 
-        Page<ProductDTO> foundResultName = serviceToTest.searchForProducts(testEntity.getCategory());
+        Page<ProductDTO> result = serviceToTest.searchForProducts(testEntity.getCategory());
 
-        Assertions.assertEquals(1, foundResultName.getTotalElements());
-        Assertions.assertEquals(testEntity.getCategory(), foundResultName.getContent().getFirst().category());
+        Assertions.assertEquals(1, result.getTotalElements());
+        Assertions.assertEquals(category, result.getContent().getFirst().category());
 
     }
 
@@ -94,17 +90,16 @@ class ProductServiceImplTest {
     void testSearchForProductsWithDescription() {
         ProductEntity testEntity = createEntity();
 
-        // crate page of Entity
-        Page<ProductEntity> testPages = new PageImpl<>(List.of(testEntity), Pageable.unpaged(), 1);
+        String description= testEntity.getDescription();
+        Page<ProductEntity> testPages = new PageImpl<ProductEntity>(List.of(testEntity), Pageable.unpaged(), 1);
 
-        when(mockProductRepository.findAllByKeyword(testEntity.getDescription(), Pageable.unpaged()))
+        when(mockProductRepository.searchAllByDescriptionContainingOrCategoryOrNameContaining(description,description,description, Pageable.unpaged()))
                 .thenReturn(testPages);
 
-        Page<ProductDTO> foundResultName = serviceToTest.searchForProducts(testEntity.getDescription());
+        Page<ProductDTO> result = serviceToTest.searchForProducts(testEntity.getDescription());
 
-        Assertions.assertEquals(1, foundResultName.getTotalElements());
-        Assertions.assertEquals(testEntity.getDescription(), foundResultName.getContent().getFirst().description());
-
+        Assertions.assertEquals(1, result.getTotalElements());
+        Assertions.assertEquals(description, result.getContent().getFirst().description());
     }
 
     @Test
