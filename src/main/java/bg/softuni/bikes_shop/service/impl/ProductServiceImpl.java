@@ -72,8 +72,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Page<ProductDTO> searchForProducts(String productToSearch) {
 
-        return productRepository.findAllByKeyword(productToSearch,Pageable.unpaged())
+//        return productRepository.findAllByKeyword(productToSearch,Pageable.unpaged())
+//                .map(ProductServiceImpl::mapToDTO);
+
+        return productRepository.searchAllByDescriptionContainingOrCategoryOrNameContaining(productToSearch,productToSearch,productToSearch,Pageable.unpaged())
                 .map(ProductServiceImpl::mapToDTO);
+
     }
     @Cacheable("categories")
     @Override
