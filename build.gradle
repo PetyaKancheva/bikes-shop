@@ -44,7 +44,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'com.icegreen:greenmail:2.0.0'
-    testImplementation 'org.hsqldb:hsqldb'
+//    testImplementation 'org.hsqldb:hsqldb'
+    testImplementation 'com.h2database:h2'
     testImplementation 'org.mock-server:mockserver-netty-no-dependencies:5.15.0'
 
 //	testImplementation 'org.mock-server:mockserver-client-java-no-dependencies:5.15.0'
@@ -54,16 +55,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
-
-
-
-//val mockitoAgent = configurations.create("mockitoAgent")
-//dependencies {
-//	testImplementation(libs.mockito)
-//	mockitoAgent(libs.mockito) { isTransitive = false }
-//}
-//tasks {
-//	test {
-//		jvmArgs.add("-javaagent:${mockitoAgent.asPath}")
-//	}
-//}
