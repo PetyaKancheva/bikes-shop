@@ -1,17 +1,12 @@
 package bg.softuni.bikes_shop.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
-import org.hibernate.annotations.GenericGenerator;
-
 import java.math.BigDecimal;
-import java.security.SecureRandom;
 
 @Entity
 @Table(name = "products")
+
 public class ProductEntity extends BaseEntity {
 
     @Column(name = "name", nullable = false)
