@@ -83,9 +83,7 @@ public class HomeController {
 
     @GetMapping("/error/500")
     private void testError(Model model) {
-            throw new RuntimeException();
-
-    }
+            throw new RuntimeException();   }
 
     @PostMapping("/search-result")
     private String search(Model model, String productToSearch, RedirectAttributes rAtt,@CookieValue(value = "currency", required = false)String cookie,
