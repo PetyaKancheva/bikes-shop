@@ -14,7 +14,11 @@ public class CurrentOrder {
 
     List<ItemDTO> items;
     Double totalPrice;
-
+        // new 09 09 25
+    public CurrentOrder(List<ItemDTO> items, Double totalPrice) {
+        this.items = items;
+        this.totalPrice = totalPrice;
+    }
 
     public CurrentOrder() {
     }
@@ -61,9 +65,9 @@ public class CurrentOrder {
 
     }
     public void deleteItem(String  itemProductCompositeName ){
-        ItemDTO itemDTO=items.stream().filter(i->itemProductCompositeName.equals(i.getProductCompositeName())).findFirst().orElseThrow();
+        ItemDTO itemDTO=this.items.stream().filter(i->itemProductCompositeName.equals(i.getProductCompositeName())).findFirst().orElseThrow();
         this.totalPrice-=itemDTO.getPrice()*itemDTO.getQuantity();
-        items.remove(itemDTO);
+        this.items.remove(itemDTO);
     }
 
     public void clear() {

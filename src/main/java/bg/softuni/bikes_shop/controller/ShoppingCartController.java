@@ -40,7 +40,7 @@ public class ShoppingCartController {
     }
 
 
-    @PreAuthorize("#principal")
+//    @PreAuthorize("#principal") brieflz removed
     @PostMapping("/shopping-cart/delete")
     public String delete(String productID) {
         //  TODO validate if product ID exists

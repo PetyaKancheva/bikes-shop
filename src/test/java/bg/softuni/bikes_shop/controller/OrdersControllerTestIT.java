@@ -63,8 +63,6 @@ class OrdersControllerTestIT {
  mockMvc.perform(MockMvcRequestBuilders.get("/orders")
                         .with(user(testAdmin))
                 .with(csrf()))
-                .andExpect(status().isOk())
-
-                .andExpect(model().hasNoErrors());
+                .andExpectAll(status().isOk(),model().hasNoErrors());
     }
 }

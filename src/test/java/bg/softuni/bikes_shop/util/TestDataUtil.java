@@ -2,6 +2,7 @@ package bg.softuni.bikes_shop.util;
 
 import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.UserRoleEnum;
+import bg.softuni.bikes_shop.model.dto.ItemDTO;
 import bg.softuni.bikes_shop.model.dto.ProductAddDTO;
 import bg.softuni.bikes_shop.model.entity.*;
 import bg.softuni.bikes_shop.repository.*;
