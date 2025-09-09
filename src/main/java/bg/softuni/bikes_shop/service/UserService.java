@@ -8,7 +8,7 @@ import java.util.List;
 public interface UserService {
     void register(UserRegisterDTO userRegisterDTO);
 
-    void notify(UserUpdateProfileEvent event);
+    void sendEmail(UserUpdateProfileEvent event);
 
     List<ShortUserProfileDTO> getAllByEmailFirsOrLastName(String searchWord);
 
@@ -16,7 +16,7 @@ public interface UserService {
     UserUpdateMainDetailsDTO getUserMainUpdateDTO(String email);
 
     void updateMainUserDetails(UserUpdateMainDetailsDTO userUpdateMainDetailsDTO);
-    void updateEmail( UserUpdateEmailDTO userUpdateEmailDTO, String oldEmail);
+    void updateEmail( UserUpdateEmailDTO userUpdateEmailDTO);
     void updatePassword(UserUpdatePasswordDTO userUpdatePasswordDTO);
 
     void updateByAdmin(UserUpdateByAdminDTO userUpdateByAdminDTO);

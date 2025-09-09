@@ -1,7 +1,9 @@
 package bg.softuni.bikes_shop.controller;
 
 
+import bg.softuni.bikes_shop.model.dto.UserUpdateEmailDTO;
 import bg.softuni.bikes_shop.model.dto.UserUpdateMainDetailsDTO;
+import bg.softuni.bikes_shop.model.dto.UserUpdatePasswordDTO;
 import bg.softuni.bikes_shop.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -27,20 +29,22 @@ public class UserProfileController {
     @GetMapping("/user")
     private String profileGet(Principal principal, Model model) {
 
-        if (!model.containsAttribute("userUpdateDTO")) {
-//            model.addAttribute("userUpdateDTO",
-//                    new UserUpdaterMainDetailsDTO(
-//                            userService.getUserMainUpdateDTO(principal.getName()),
-//                            new UserUpdatePasswordDTO(principal.getName(), "", "")));
+        if (!model.containsAttribute("userUpdateMainDetailsDTO")) {
+            model.addAttribute("userUpdateMainDetailsDTO",userService.getUserMainUpdateDTO(principal.getName()));
         }
-
+        if (!model.containsAttribute("userUpdatePasswordDTO")) {
+            model.addAttribute("userUpdatePasswordDTO", UserUpdatePasswordDTO.empty());
+        }
+        if (!model.containsAttribute("userUpdateEmailDTO")) {
+            model.addAttribute("userUpdateEmailDTO",UserUpdateEmailDTO.empty());
+        }
+        
         return "user-profile";
     }
 
-    @PostMapping("/user")
+    @PostMapping("/user/main")
     private String mainProfileUpdate(Principal principal, @Valid UserUpdateMainDetailsDTO userUpdateMainDetailsDTO,
                                  BindingResult bindingResult, RedirectAttributes rAtt) {
-        System.out.println();
 
         if (bindingResult.hasErrors()) {
             rAtt.addFlashAttribute("updateUserMainDetailsDTO", userUpdateMainDetailsDTO);
@@ -49,6 +53,41 @@ public class UserProfileController {
         }
 
         userService.updateMainUserDetails(userUpdateMainDetailsDTO);
+
+        rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
+
+        return "redirect:/login?logout";
+
+    }
+
+    @PostMapping("/user/password")
+    private String passwordUpdate(Principal principal, @Valid UserUpdatePasswordDTO userUpdatePasswordDTO,
+                                     BindingResult bindingResult, RedirectAttributes rAtt) {
+
+        if (bindingResult.hasErrors()) {
+            rAtt.addFlashAttribute("userUpdatePasswordDTO", userUpdatePasswordDTO);
+            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.userUpdatePasswordDTO", bindingResult);
+            return "redirect:/user";
+        }
+
+        userService.updatePassword(userUpdatePasswordDTO);
+        // add different for pass and email?
+        rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
+
+        return "redirect:/login?logout";
+
+    }
+    @PostMapping("/user/email")
+    private String emailUpdate(Principal principal, @Valid UserUpdateEmailDTO userUpdateEmailDTO,
+                                     BindingResult bindingResult, RedirectAttributes rAtt) {
+
+        if (bindingResult.hasErrors()) {
+            rAtt.addFlashAttribute("userUpdateEmailDTO", userUpdateEmailDTO);
+            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.userUpdateEmailDTO", bindingResult);
+            return "redirect:/user";
+        }
+
+        userService.updateEmail(userUpdateEmailDTO);
 
         rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
 
