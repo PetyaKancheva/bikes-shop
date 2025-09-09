@@ -8,7 +8,9 @@ import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.service.impl.ItemServiceImpl;
 import bg.softuni.bikes_shop.util.TestDataUtil;
 import bg.softuni.bikes_shop.util.TestUserUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.ui.Model;
+import org.springframework.web.servlet.ModelAndView;
+
 import static org.aspectj.runtime.internal.Conversions.doubleValue;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -37,14 +44,15 @@ class OrdersControllerTestIT {
 
     @BeforeEach
     void setUp() {
-        testUserUtil.cleanUp();
         testDataUtil.cleanUp();
+        testUserUtil.cleanUp();
     }
 
     @AfterEach
     void tearDown() {
-        testUserUtil.cleanUp();
         testDataUtil.cleanUp();
+        testUserUtil.cleanUp();
+
     }
 
     @Test
@@ -52,11 +60,11 @@ class OrdersControllerTestIT {
         CustomUserDetails testAdmin = testUserUtil.createTestAdmin("admin@mail.com");
         OrderEntity orderEntity = testDataUtil.createOrderEntity(testAdmin.getEmail());
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/orders")
+ mockMvc.perform(MockMvcRequestBuilders.get("/orders")
                         .with(user(testAdmin))
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andReturn().getModelAndView().getModel("addOrders");
 
+                .andExpect(model().hasNoErrors());
     }
 }

@@ -32,17 +32,17 @@ class ItemServiceImplTest {
 
     @Test
     void testCreateItem() {
-//        arrange
         String testCompositeName="testCompositeName";
+
         ItemDTO testItemDTO=new ItemDTO().setPrice(1d).setQuantity(1).setProductName("testName").setProductCompositeName(testCompositeName);
         OrderEntity testOrder= new OrderEntity();
         ProductEntity testProductEntity= new ProductEntity().setCompositeName(testCompositeName);
 
        when(mockProductRepository.findByCompositeName(testItemDTO.getProductCompositeName()))
                 .thenReturn( Optional.of(testProductEntity));
-//         act
+
         testItemService.createItem(testItemDTO,testOrder);
-//         assert
+
         Assertions.assertNotNull(mockItemRepository);
     }
     @Test

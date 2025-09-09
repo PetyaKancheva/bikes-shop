@@ -131,9 +131,6 @@ class ProductServiceImplTest {
         return  PageRequest.of(page, size, Sort.by(order));
     }
 
-  
-
-
     @Test
     void testGetProductsFromCategoryPageable() {
 

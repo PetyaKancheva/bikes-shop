@@ -4,6 +4,7 @@ import bg.softuni.bikes_shop.exceptions.CustomObjectNotFoundException;
 import bg.softuni.bikes_shop.model.dto.ItemDTO;
 import bg.softuni.bikes_shop.model.entity.ItemEntity;
 import bg.softuni.bikes_shop.model.entity.OrderEntity;
+import bg.softuni.bikes_shop.model.entity.ProductEntity;
 import bg.softuni.bikes_shop.repository.ItemRepository;
 import bg.softuni.bikes_shop.repository.ProductRepository;
 import bg.softuni.bikes_shop.service.ItemService;
@@ -23,11 +24,15 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public void createItem(ItemDTO itemDTO, OrderEntity orderEntity) {
-        itemRepository.save(new ItemEntity()
-                .setProduct(productRepository.findByCompositeName(itemDTO.getProductCompositeName())
-                        .orElseThrow(() -> new CustomObjectNotFoundException("Product with id: " + itemDTO.getProductName() + " not found!")))
-                .setQuantity(itemDTO.getQuantity())
-                .setOrder(orderEntity));
+        ProductEntity existingProduct=productRepository.findByCompositeName(itemDTO.getProductCompositeName())
+                .orElseThrow(() -> new CustomObjectNotFoundException("Product with id: " + itemDTO.getProductName() + " not found!"));
+
+            ItemEntity newItem=new ItemEntity()
+                    .setProduct(existingProduct)
+                    .setQuantity(itemDTO.getQuantity())
+                    .setOrder(orderEntity);
+
+        itemRepository.save(newItem);
 
     }
 

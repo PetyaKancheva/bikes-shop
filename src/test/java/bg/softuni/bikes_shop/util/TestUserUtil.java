@@ -2,12 +2,15 @@ package bg.softuni.bikes_shop.util;
 
 import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.UserRoleEnum;
+import bg.softuni.bikes_shop.model.entity.OrderEntity;
 import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.repository.UserRepository;
 import bg.softuni.bikes_shop.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -35,6 +38,7 @@ public class TestUserUtil {
     private UserEntity createUser(String email, List<UserRoleEnum> roles) {
 
         var roleEntities = userRoleRepository.findAllByNameIn(roles);
+
         UserEntity newUser = new UserEntity()
                 .setEnabled(false)
                 .setFirstName("First name test")
@@ -44,7 +48,6 @@ public class TestUserUtil {
                 .setCountry("Country Test")
                 .setRoles(roleEntities)
                 .setPassword("test1234");
-
         return userRepository.save(newUser);
     }
 

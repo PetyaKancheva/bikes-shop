@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static org.aspectj.runtime.internal.Conversions.doubleValue;
 
+
 @Service
 public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
@@ -44,8 +45,6 @@ public class OrderServiceImpl implements OrderService {
         for (ItemDTO item : currentOrder.getItems()) {
             itemService.createItem(item, newOrder);
         }
-
-
     }
 
     @Override
