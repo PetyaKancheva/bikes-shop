@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/activate/*").permitAll()
                         .requestMatchers("/admin/**").hasRole(UserRoleEnum.ADMIN.name())
                         .requestMatchers("/product/add").hasRole(UserRoleEnum.EMPLOYEE.name())
-                        .requestMatchers("/user").hasAnyRole(UserRoleEnum.USER.name(),UserRoleEnum.EMPLOYEE.name(),UserRoleEnum.ADMIN.name())
+                        .requestMatchers("/user","/user/main","/user/password","/user/email").hasAnyRole(UserRoleEnum.USER.name(),UserRoleEnum.EMPLOYEE.name(),UserRoleEnum.ADMIN.name())
                         .requestMatchers(HttpMethod.GET, "/product/**").permitAll()
                         .requestMatchers("/{categories}", String.valueOf(productService.getDistinctCategories())).permitAll()
                         .anyRequest().authenticated()

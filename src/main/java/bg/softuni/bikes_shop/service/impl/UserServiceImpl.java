@@ -206,7 +206,6 @@ public class UserServiceImpl implements UserService {
                         email,
                         firstName,
                         String.valueOf(Instant.now())));
-
     }
 
 }

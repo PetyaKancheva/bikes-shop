@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -97,6 +98,97 @@ class UserProfileControllerTestIT {
         Assertions.assertTrue(updateMessage.getContent().toString().contains("update"));
         Assertions.assertEquals(1, updateMessage.getAllRecipients().length);
         Assertions.assertEquals(testUser.getEmail(), updateMessage.getAllRecipients()[0].toString());
+
+    }
+
+
+    @Test
+    void testUpdatePasswordSuccess() throws Exception {
+        CustomUserDetails testUser = testUserUtil.createTestUser("user@mail.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/password")
+                        .param("oldPassword","test1234")
+                        .param("newPassword","newPass2")
+                        .param("confirmPassword","newPass2")
+                        .param("currentEmail",testUser.getEmail())
+                        .with(user(testUser))
+                        .with(csrf()))
+                .andExpectAll(status().is3xxRedirection())
+                .andExpect(flash().attribute("message","Your profile is successfully updated!"));
+
+
+        greenMail.waitForIncomingEmail(1);
+        MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+
+        Assertions.assertEquals(1, receivedMessages.length);
+        MimeMessage updateMessage = receivedMessages[0];
+
+        Assertions.assertTrue(updateMessage.getContent().toString().contains("update"));
+        Assertions.assertEquals(1, updateMessage.getAllRecipients().length);
+        Assertions.assertEquals(testUser.getEmail(), updateMessage.getAllRecipients()[0].toString());
+
+    }
+    @Test
+    void testUpdatePasswordMismatch() throws Exception {
+        CustomUserDetails testUser = testUserUtil.createTestUser("user@mail.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/password")
+                        .param("oldPassword","test1234")
+                        .param("newPassword","newPass")
+                        .param("confirmPassword","newPass2")
+                        .param("currentEmail",testUser.getEmail())
+                        .with(user(testUser))
+                        .with(csrf()))
+                .andExpect(flash().attributeCount(2))
+                .andExpect(flash().attributeExists("org.springframework.validation.BindingResult.userUpdatePasswordDTO"))
+                .andExpect(status().is3xxRedirection()) ;
+
+
+    }
+
+
+    @Test
+    void testUpdateEmailSuccess() throws Exception {
+        CustomUserDetails testUser = testUserUtil.createTestUser("user@mail.com");
+        String newEmail="2" +testUser.getEmail();
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/email")
+                        .param("oldEmail",testUser.getEmail())
+                        .param("newEmail",newEmail)
+                        .param("confirmEmail",newEmail)
+                        .param("currentPassword","test1234")
+                        .with(user(testUser))
+                        .with(csrf()))
+                .andExpectAll(status().is3xxRedirection())
+                .andExpect(flash().attribute("message","Your profile is successfully updated!"));
+
+
+        greenMail.waitForIncomingEmail(1);
+        MimeMessage[] receivedMessages = greenMail.getReceivedMessages();
+
+        Assertions.assertEquals(1, receivedMessages.length);
+        MimeMessage updateMessage = receivedMessages[0];
+
+        Assertions.assertTrue(updateMessage.getContent().toString().contains("update"));
+        Assertions.assertEquals(1, updateMessage.getAllRecipients().length);
+        Assertions.assertEquals(newEmail, updateMessage.getAllRecipients()[0].toString());
+
+    }
+    @Test
+    void testUpdateEmailMismatch() throws Exception {
+        CustomUserDetails testUser = testUserUtil.createTestUser("user@mail.com");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/email")
+                        .param("oldEmail",testUser.getEmail())
+                        .param("newEmail","t@mail.com")
+                        .param("confirmEmail","tE@mail.com")
+                        .param("currentPassword","test1234")
+                        .with(user(testUser))
+                        .with(csrf()))
+                .andExpect(flash().attributeCount(2))
+                .andExpect(flash().attributeExists("org.springframework.validation.BindingResult.userUpdateEmailDTO"))
+                .andExpect(status().is3xxRedirection()) ;
+
 
     }
 }

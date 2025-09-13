@@ -6,7 +6,9 @@ import bg.softuni.bikes_shop.model.entity.OrderEntity;
 import bg.softuni.bikes_shop.model.entity.UserEntity;
 import bg.softuni.bikes_shop.repository.UserRepository;
 import bg.softuni.bikes_shop.repository.UserRoleRepository;
+import com.fasterxml.jackson.core.Base64Variant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -21,6 +23,12 @@ public class TestUserUtil {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
+
+    public TestUserUtil(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     public CustomUserDetails createTestUser(String email) {
@@ -47,7 +55,7 @@ public class TestUserUtil {
                 .setAddress("Address Test")
                 .setCountry("Country Test")
                 .setRoles(roleEntities)
-                .setPassword("test1234");
+                .setPassword(passwordEncoder.encode("test1234"));
         return userRepository.save(newUser);
     }
 

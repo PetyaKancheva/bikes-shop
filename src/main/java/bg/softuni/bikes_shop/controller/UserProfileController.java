@@ -1,6 +1,7 @@
 package bg.softuni.bikes_shop.controller;
 
 
+import bg.softuni.bikes_shop.model.CustomUserDetails;
 import bg.softuni.bikes_shop.model.dto.UserUpdateEmailDTO;
 import bg.softuni.bikes_shop.model.dto.UserUpdateMainDetailsDTO;
 import bg.softuni.bikes_shop.model.dto.UserUpdatePasswordDTO;
@@ -28,27 +29,29 @@ public class UserProfileController {
 
     @GetMapping("/user")
     private String profileGet(Principal principal, Model model) {
+        String email=principal.getName();
 
         if (!model.containsAttribute("userUpdateMainDetailsDTO")) {
-            model.addAttribute("userUpdateMainDetailsDTO",userService.getUserMainUpdateDTO(principal.getName()));
+            model.addAttribute("userUpdateMainDetailsDTO", userService.getUserMainUpdateDTO(email));
         }
         if (!model.containsAttribute("userUpdatePasswordDTO")) {
             model.addAttribute("userUpdatePasswordDTO", UserUpdatePasswordDTO.empty());
         }
         if (!model.containsAttribute("userUpdateEmailDTO")) {
-            model.addAttribute("userUpdateEmailDTO",UserUpdateEmailDTO.empty());
+              model.addAttribute("userUpdateEmailDTO", new UserUpdateEmailDTO(email,null,null,null));
         }
-        
+
+
         return "user-profile";
     }
 
     @PostMapping("/user/main")
     private String mainProfileUpdate(Principal principal, @Valid UserUpdateMainDetailsDTO userUpdateMainDetailsDTO,
-                                 BindingResult bindingResult, RedirectAttributes rAtt) {
+                                     BindingResult bindingResult, RedirectAttributes rAtt) {
 
         if (bindingResult.hasErrors()) {
-            rAtt.addFlashAttribute("updateUserMainDetailsDTO", userUpdateMainDetailsDTO);
-            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.updateUserMainDetailsDTO", bindingResult);
+            rAtt.addFlashAttribute("userUpdateMainDetailsDTO", userUpdateMainDetailsDTO);
+            rAtt.addFlashAttribute("org.springframework.validation.BindingResult.userUpdateMainDetailsDTO", bindingResult);
             return "redirect:/user";
         }
 
@@ -61,8 +64,7 @@ public class UserProfileController {
     }
 
     @PostMapping("/user/password")
-    private String passwordUpdate(Principal principal, @Valid UserUpdatePasswordDTO userUpdatePasswordDTO,
-                                     BindingResult bindingResult, RedirectAttributes rAtt) {
+    private String passwordUpdate(@Valid UserUpdatePasswordDTO userUpdatePasswordDTO, BindingResult bindingResult, RedirectAttributes rAtt) {
 
         if (bindingResult.hasErrors()) {
             rAtt.addFlashAttribute("userUpdatePasswordDTO", userUpdatePasswordDTO);
@@ -75,11 +77,11 @@ public class UserProfileController {
         rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
 
         return "redirect:/login?logout";
-
+//        return "redirect:/user";
     }
+
     @PostMapping("/user/email")
-    private String emailUpdate(Principal principal, @Valid UserUpdateEmailDTO userUpdateEmailDTO,
-                                     BindingResult bindingResult, RedirectAttributes rAtt) {
+    private String emailUpdate( @Valid UserUpdateEmailDTO userUpdateEmailDTO, BindingResult bindingResult, RedirectAttributes rAtt) {
 
         if (bindingResult.hasErrors()) {
             rAtt.addFlashAttribute("userUpdateEmailDTO", userUpdateEmailDTO);
@@ -92,7 +94,7 @@ public class UserProfileController {
         rAtt.addFlashAttribute(ATTRIBUTE_MSG_NAME, SUCCESSFULLY_UPDATED_OWN_PROFILE_MSG);
 
         return "redirect:/login?logout";
-
+//        return "redirect:/user";
     }
 
 
