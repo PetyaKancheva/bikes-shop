@@ -17,15 +17,22 @@ Web-app for a bicycle shop 🚴‍♂️
 #### Snippets
 
 - test coverage <br>
-<img height=300 src="src/main/resources/static/snippets/test_coverage.png"/>
+<img  src="src/main/resources/static/snippets/test_coverage.png"/>
+
+- database <br>
+<img  src="src/main/resources/static/snippets/database_diagram.png"/>
+
 
 - login <br>
-<img height=300 src="src/main/resources/static/snippets/login.png"/>
+<img  src="src/main/resources/static/snippets/login.png"/>
 
 - register <br>
-<img height=300 src="src/main/resources/static/snippets/register.png"/>
+<img src="src/main/resources/static/snippets/register.png"/>
 
 - update profile by admin <br>
-<img height=300 src="src/main/resources/static/snippets/test_coverage.png"/>
+<img  src="src/main/resources/static/snippets/update_admin.png"/>
+
+- update profile by user <br>
+<img src="src/main/resources/static/snippets/update_self.png"/>
 
 
