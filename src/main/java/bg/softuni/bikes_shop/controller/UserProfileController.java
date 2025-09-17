@@ -6,12 +6,18 @@ import bg.softuni.bikes_shop.model.dto.UserUpdateEmailDTO;
 import bg.softuni.bikes_shop.model.dto.UserUpdateMainDetailsDTO;
 import bg.softuni.bikes_shop.model.dto.UserUpdatePasswordDTO;
 import bg.softuni.bikes_shop.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -29,7 +35,7 @@ public class UserProfileController {
 
     @GetMapping("/user")
     private String profileGet(Principal principal, Model model) {
-        String email=principal.getName();
+        String email = principal.getName();
 
         if (!model.containsAttribute("userUpdateMainDetailsDTO")) {
             model.addAttribute("userUpdateMainDetailsDTO", userService.getUserMainUpdateDTO(email));
@@ -38,7 +44,7 @@ public class UserProfileController {
             model.addAttribute("userUpdatePasswordDTO", UserUpdatePasswordDTO.empty());
         }
         if (!model.containsAttribute("userUpdateEmailDTO")) {
-              model.addAttribute("userUpdateEmailDTO", new UserUpdateEmailDTO(email,null,null,null));
+            model.addAttribute("userUpdateEmailDTO", new UserUpdateEmailDTO(email, null, null, null));
         }
 
 
@@ -81,7 +87,7 @@ public class UserProfileController {
     }
 
     @PostMapping("/user/email")
-    private String emailUpdate( @Valid UserUpdateEmailDTO userUpdateEmailDTO, BindingResult bindingResult, RedirectAttributes rAtt) {
+    private String emailUpdate(@Valid UserUpdateEmailDTO userUpdateEmailDTO, BindingResult bindingResult, RedirectAttributes rAtt) {
 
         if (bindingResult.hasErrors()) {
             rAtt.addFlashAttribute("userUpdateEmailDTO", userUpdateEmailDTO);
@@ -95,6 +101,8 @@ public class UserProfileController {
 
         return "redirect:/login?logout";
 //        return "redirect:/user";
+
+
     }
 
 
