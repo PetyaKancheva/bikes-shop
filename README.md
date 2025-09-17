@@ -16,3 +16,16 @@ Web-app for a bicycle shop 🚴‍♂️
 
 #### Snippets
 
+- test coverage <br>
+<img height=300 src="src/main/resources/static/snippets/test_coverage.png"/>
+
+- login <br>
+<img height=300 src="src/main/resources/static/snippets/login.png"/>
+
+- register <br>
+<img height=300 src="src/main/resources/static/snippets/register.png"/>
+
+- update profile by admin <br>
+<img height=300 src="src/main/resources/static/snippets/test_coverage.png"/>
+
+
