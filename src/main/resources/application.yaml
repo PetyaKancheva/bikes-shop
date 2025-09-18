@@ -1,7 +1,7 @@
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/shop?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    url: jdbc:mysql://${MYSQL_HOST}:3306/shop?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
     password: ${MYSQL_PASSWORD:}
     username: ${MYSQL_USERNAME:}
 # for RDS
@@ -85,7 +85,7 @@ mail:
   host: localhost
   port: 1025
   username: ${MAIL_USER:admin}
-  password: ${MAIL_PASSWORD:password}
+  password: ${MAIL_PASSWORD}
 
 comments-server:
   schema: http
