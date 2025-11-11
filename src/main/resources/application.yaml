@@ -64,6 +64,12 @@ logging:
       SQL: DEBUG
     nodeValue: WARN
     blog: WARN
+  file:
+    name: ./var/logging.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      file-name-pattern: ${LOG_PATH}/archived/${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz
 
 server:
   port: 8080

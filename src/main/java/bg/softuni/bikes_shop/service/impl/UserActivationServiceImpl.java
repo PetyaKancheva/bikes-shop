@@ -8,7 +8,10 @@ import bg.softuni.bikes_shop.repository.ActivationCodeRepository;
 import bg.softuni.bikes_shop.repository.UserRepository;
 import bg.softuni.bikes_shop.service.EmailService;
 import bg.softuni.bikes_shop.service.UserActivationService;
+import bg.softuni.bikes_shop.service.scheduelers.ProductCompositeNameScheduler;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,7 @@ public class UserActivationServiceImpl implements UserActivationService {
     private final EmailService emailService;
     private final UserRepository userRepository;
     private final ActivationCodeRepository activationCodeRepository;
+    private static final Logger logger = LoggerFactory.getLogger(UserActivationServiceImpl.class);
 
     public UserActivationServiceImpl(EmailService emailService, UserRepository userRepository, ActivationCodeRepository activationCodeRepository) {
         this.emailService = emailService;
@@ -41,13 +45,13 @@ public class UserActivationServiceImpl implements UserActivationService {
         emailService.sendRegistrationEmail(event.getUserEmail(), event.getUserFirstName(),
                 createActivationCode(event.getUserEmail()));
 
-        System.out.println("User with name: " + event.getUserFirstName() + " registered");
+        logger.info("User with name: {} registered", event.getUserFirstName());
     }
 
     @Override
     @Transactional
     public void cleanUpObsoleteActivationLinks() {
-        activationCodeRepository.deleteUserActivationCodeEntitiesByCreatedIsBefore(Instant.now() .minus(1, DAYS));
+        activationCodeRepository.deleteUserActivationCodeEntitiesByCreatedIsBefore(Instant.now().minus(1, DAYS));
     }
 
     @Override
@@ -55,13 +59,13 @@ public class UserActivationServiceImpl implements UserActivationService {
         if (activationCodeRepository.findByActivationCode(userActivationCode).isPresent()) {
             Optional<UserActivationCodeEntity> uaEntity = activationCodeRepository.findByActivationCode(userActivationCode);
             if (DAYS.between(uaEntity.get().getCreated(), Instant.now()) <= 1) {
-            if(userRepository.findById(uaEntity.get().getUser().getId()).isPresent()) {
+                if (userRepository.findById(uaEntity.get().getUser().getId()).isPresent()) {
 
-                userRepository.save(userRepository.findById(uaEntity.get().getUser().getId()).get().setEnabled(true));
+                    userRepository.save(userRepository.findById(uaEntity.get().getUser().getId()).get().setEnabled(true));
 
-                activationCodeRepository.delete(uaEntity.orElseThrow());
-                return true;
-            }
+                    activationCodeRepository.delete(uaEntity.orElseThrow());
+                    return true;
+                }
 
             }
         }
