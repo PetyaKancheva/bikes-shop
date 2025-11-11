@@ -1,6 +1,8 @@
 package bg.softuni.bikes_shop.service.scheduelers;
 
 import bg.softuni.bikes_shop.service.UserActivationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +11,7 @@ import java.time.Instant;
 @Component
 public class ActivationCodeCleanupScheduler {
     private final UserActivationService userActivationService;
+    private static final Logger logger = LoggerFactory.getLogger(ActivationCodeCleanupScheduler.class);
 
     public ActivationCodeCleanupScheduler(UserActivationService userActivationService) {
         this.userActivationService = userActivationService;
@@ -18,6 +21,6 @@ public class ActivationCodeCleanupScheduler {
 //    @Scheduled(cron ="0 */1 */1 * * *")// every 1 min
     public void cleanUp(){
         userActivationService.cleanUpObsoleteActivationLinks();
-        System.out.println("Activation cleanup service *** " + Instant.now() +" ***");
+        logger.info("Activation cleanup service done ***");
     }
 }

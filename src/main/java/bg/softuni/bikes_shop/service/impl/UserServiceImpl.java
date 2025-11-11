@@ -11,6 +11,8 @@ import bg.softuni.bikes_shop.repository.UserRepository;
 import bg.softuni.bikes_shop.repository.UserRoleRepository;
 import bg.softuni.bikes_shop.service.UserRoleService;
 import bg.softuni.bikes_shop.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher appEventPublisher;
     private final EmailServiceImpl emailService;
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     public UserServiceImpl(UserRepository userRepository, UserRoleService userRoleService, PasswordEncoder passwordEncoder, ApplicationEventPublisher appEventPublisher, EmailServiceImpl emailService, UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
@@ -65,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @EventListener(UserUpdateProfileEvent.class)
     public void sendEmail(UserUpdateProfileEvent event) {
         emailService.sendProfileUpdateEmail(event.getUserEmail(), event.getUserFirstName(), event.getTimeOfUpdate());
-        System.out.println("Notification for profile update is sent to:  " + event.getUserEmail() + " !");
+        logger.info("Notification for profile update is sent to:  {} !", event.getUserEmail());
     }
 
     @Override

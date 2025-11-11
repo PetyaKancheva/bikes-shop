@@ -8,6 +8,8 @@ import bg.softuni.bikes_shop.model.events.ProductAdditionEvent;
 import bg.softuni.bikes_shop.repository.ProductRepository;
 import bg.softuni.bikes_shop.service.CurrencyService;
 import bg.softuni.bikes_shop.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -28,7 +30,7 @@ import static org.aspectj.runtime.internal.Conversions.doubleValue;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ApplicationEventPublisher appEventPublisher;
-
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     public ProductServiceImpl(ProductRepository productRepository, ApplicationEventPublisher appEventPublisher) {
         this.productRepository = productRepository;
@@ -66,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     public void addCompositeName(ProductAdditionEvent event) {
             this.setCompositeName(event.getProduct());
 
-        System.out.println("New Product " +event.getProduct().getName()+ " created and composite name set");
+        logger.info("*** New Product {} created and composite name set***", event.getProduct().getName());
     }
 
     @Override
@@ -79,7 +81,7 @@ public class ProductServiceImpl implements ProductService {
     @Cacheable("categories")
     @Override
     public List<String> getDistinctCategories() {
-        System.out.println("get cached categories");
+        logger.info("***get cached categories***");
         return               productRepository.getDistinctCategories();
     }
 
