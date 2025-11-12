@@ -55,10 +55,10 @@ public class CurrencyServiceImpl implements CurrencyService {
     public void updateLocale(HttpServletRequest request, HttpServletResponse response, String selectedCurrency) {
         Locale newLocale = null;
         switch (selectedCurrency) {
-            case BGN -> newLocale = new Locale("bg", "BG");
-            case PLN -> newLocale = new Locale("pl", "PL");
-            case USD -> newLocale = new Locale("en", "US");
-            case EUR -> newLocale = new Locale("de", "DE");
+            case BGN -> newLocale = new Locale.Builder().setLanguage("bg").setRegion("BG").build();
+            case PLN -> newLocale = new Locale.Builder().setLanguage("pl").setRegion("PL").build();
+            case USD -> newLocale = new Locale.Builder().setLanguage("en").setRegion("US").build();
+            case EUR -> newLocale = new Locale.Builder().setLanguage("de").setRegion("DE").build();
 
         }
         localeResolver.setLocale(request, response, newLocale);
@@ -86,11 +86,11 @@ public class CurrencyServiceImpl implements CurrencyService {
     }
 
     @Override
-    public CurrencyExchangeDTO getCurrencyDTO(HttpServletRequest request,HttpServletResponse response, String cookie) {
-          if (cookie != null){
-              Locale currentLocale  =localeResolver.resolveLocale(request);
-               compareLocale(request,response,currentLocale,cookie);
-          }
+    public CurrencyExchangeDTO getCurrencyDTO(HttpServletRequest request, HttpServletResponse response, String cookie) {
+        if (cookie != null) {
+            Locale currentLocale = localeResolver.resolveLocale(request);
+            compareLocale(request, response, currentLocale, cookie);
+        }
 
 
         if (cookie == null || cookie.equals(EUR)) {
@@ -102,11 +102,13 @@ public class CurrencyServiceImpl implements CurrencyService {
         }
 
     }
-    private void compareLocale(HttpServletRequest request,HttpServletResponse response,  Locale currentLocale
-                               ,String cookie){
-        if(currentLocale.getCountry().equals("DE") && !cookie.equals("EUR")){
-             updateLocale(request,response,cookie);
-        };
+
+    private void compareLocale(HttpServletRequest request, HttpServletResponse response, Locale currentLocale
+            , String cookie) {
+        if (currentLocale.getCountry().equals("DE") && !cookie.equals("EUR")) {
+            updateLocale(request, response, cookie);
+        }
+        ;
 
     }
 

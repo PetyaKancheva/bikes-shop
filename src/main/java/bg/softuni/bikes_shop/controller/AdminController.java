@@ -66,7 +66,6 @@ public class AdminController {
                     userService.getUserAdminUpdateDTO(currentEmail));
         }
         return "admin-profile";
-
     }
 
     @PostMapping("/admin/update/{id}")
