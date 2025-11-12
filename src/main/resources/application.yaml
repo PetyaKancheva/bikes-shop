@@ -65,6 +65,7 @@ logging:
     blog: WARN
   file:
     name: ./var/logging.log
+    path: ./var
   logback:
     rollingpolicy:
       max-file-size: 10MB
