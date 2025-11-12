@@ -23,7 +23,7 @@ public class LangConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.GERMANY);
+        slr.setDefaultLocale(new Locale.Builder().setLanguage("de").setRegion("DE").build());
         return slr;
     }
     @Bean

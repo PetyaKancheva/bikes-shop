@@ -5,18 +5,18 @@
 <body >
 <div>    <nav th:replace="~{fragments/navigation}"></nav></div>
 
-<h5 class="card-title pt-5 text-center">Contacts Bikes-Shop</h5>
+<h5 class="card-title pt-5 text-center" th:text="#{contacts_title}"></h5>
 <div class="container ">
     <div class="row text-center contacts">
         <div class="col  ">
-           <h6>Physical shop in Lübeck</h6>
+           <h6  th:text="#{contacts_physical_address}"></h6>
             <p>Mustermannstr. 19</p>
             <p>Lübeck</p>
             <p>Germany</p>
 
         </div>
         <div class="col">
-            <h6>Online per e-Mail</h6>
+            <h6  th:text="#{contacts_online_address}"></h6>
             <p>contact@bikes-shop.com</p>
 
         </div>

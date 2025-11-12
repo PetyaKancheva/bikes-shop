@@ -108,8 +108,6 @@ public class CurrencyServiceImpl implements CurrencyService {
         if (currentLocale.getCountry().equals("DE") && !cookie.equals("EUR")) {
             updateLocale(request, response, cookie);
         }
-        ;
-
     }
 
 }
