@@ -1,10 +1,9 @@
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${MYSQL_HOST}:3306/shop?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    password: ${MYSQL_PASSWORD:}
-    username: ${MYSQL_USERNAME:}
-# for RDS
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/shop?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
+    password: ${MYSQL_PASSWORD}
+    username: ${MYSQL_USERNAME}
+  # for RDS
 #spring:
 #  datasource:
 #    driverClassName: com.mysql.cj.jdbc.Driver
