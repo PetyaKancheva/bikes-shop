@@ -9,7 +9,7 @@
 
 <div class="flex-shrink-0 p-3 col-2">
     <div class="d-flex align-items-center pb-3 link-body-emphasis text-decoration-none border-bottom">
-        <span class="fs-5 fw-semibold">All Products</span>
+        <span class="fs-5 fw-semibold"# th:text="#{sidebar.all.products}"></span>
         <button class="btn btn-toggle d-block justify-content-end rounded border-0 collapsed"
                 data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true"> +
         </button>
@@ -17,16 +17,23 @@
     <ul class="list-unstyled ps-0" id="home-collapse">
         <li class="mb-1">
             <div class="collapse show">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 " th:each="c:${categories}">
-                    <li><a th:href="@{/{cat}(cat=${c})}"
-                           class="link-body-emphasis d-inline-flex text-decoration-none rounded">
-                        <th:block th:text="${#strings.capitalize(c)}"></th:block>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1" >
+                    <li><a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                           th:href="@{/bike}"><th:block th:text="#{sidebar.category.bike}"> </th:block>
+                    </a></li>
+                    <li><a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                           th:href="@{/wheels}"><th:block th:text="#{sidebar.category.wheels}"> </th:block>
+                    </a></li>
+                    <li><a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                           th:href="@{/groupset}"><th:block th:text="#{sidebar.category.groupset}"> </th:block>
+                    </a></li>
+                    <li><a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                           th:href="@{/chain}"><th:block th:text="#{sidebar.category.chain}"> </th:block>
                     </a></li>
                 </ul>
             </div>
         </li>
     </ul>
-
 </div>
 
 </body>
